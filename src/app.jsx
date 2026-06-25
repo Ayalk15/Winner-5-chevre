@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-// מאגר כל 26 מחזורי הליגה המלאים והרשמיים שלכם
+// מאגר כל 36 מחזורי הליגה המלאים (26 ליגה סדירה + 10 מחזורי פלייאוף מתוך 1000167415.jpg)
 const allFixtures = {
   1: [
     { id: 1, home: 'מכבי פ"ת', away: 'הפועל ק"ש', time: '22/08/26' },
@@ -129,7 +129,7 @@ const allFixtures = {
     { id: 7, home: 'בני סכנין', away: 'מכבי נתניה', time: '12/12/26' }
   ],
   15: [
-    { id: 1, home: 'מכבי פ"ת', away: 'בני סכנין', time: '19/12/26' },
+    { id: 1, home: 'מכבי פ"ת', away: 'bני סכנין', time: '19/12/26' },
     { id: 2, home: 'מכבי נתניה', away: 'בית"ר י-ם', time: '19/12/26' },
     { id: 3, home: 'הפועל ת"א', away: 'הפועל חיפה', time: '19/12/26' },
     { id: 4, home: 'הפועל ב"ש', away: 'הפועל ר"ג', time: '19/12/26' },
@@ -235,6 +235,86 @@ const allFixtures = {
     { id: 5, home: 'הפועל ר"ג', away: 'הפועל י-ם', time: '06/03/27' },
     { id: 6, home: 'מכבי ת"א', away: 'עירוני דורות טבריה', time: '06/03/27' },
     { id: 7, home: 'הפועל פ"ת', away: 'הפועל ק"ש', time: '06/03/27' }
+  ],
+  
+  // 🔥 משחקי הפלייאוף המלאים (מחזורים 27-36 מתוך 1000167415.jpg)
+  27: [
+    { id: 1, home: 'מקום 1', away: 'מקום 6', time: '13/03/27' },
+    { id: 2, home: 'מקום 2', away: 'מקום 5', time: '13/03/27' },
+    { id: 3, home: 'מקום 3', away: 'מקום 4', time: '13/03/27' },
+    { id: 4, home: 'מקום 7', away: 'מקום 11', time: '13/03/27' },
+    { id: 5, home: 'מקום 8', away: 'מקום 13', time: '13/03/27' },
+    { id: 6, home: 'מקום 9', away: 'מקום 12', time: '13/03/27' },
+    { id: 7, home: 'מקום 10', away: 'מקום 14', time: '13/03/27' }
+  ],
+  28: [
+    { id: 1, home: 'מקום 6', away: 'מקום 4', time: '20/03/27' },
+    { id: 2, home: 'מקום 5', away: 'מקום 3', time: '20/03/27' },
+    { id: 3, home: 'מקום 1', away: 'מקום 2', time: '20/03/27' },
+    { id: 4, home: 'מקום 11', away: 'מקום 14', time: '20/03/27' },
+    { id: 5, home: 'מקום 12', away: 'מקום 10', time: '20/03/27' },
+    { id: 6, home: 'מקום 13', away: 'מקום 9', time: '20/03/27' },
+    { id: 7, home: 'מקום 7', away: 'מקום 8', time: '20/03/27' }
+  ],
+  29: [
+    { id: 1, home: 'מקום 2', away: 'מקום 6', time: '03/04/27' },
+    { id: 2, home: 'מקום 3', away: 'מקום 1', time: '03/04/27' },
+    { id: 3, home: 'מקום 4', away: 'מקום 5', time: '03/04/27' },
+    { id: 4, home: 'מקום 8', away: 'מקום 11', time: '03/04/27' },
+    { id: 5, home: 'מקום 9', away: 'מקום 7', time: '03/04/27' },
+    { id: 6, home: 'מקום 10', away: 'מקום 13', time: '03/04/27' },
+    { id: 7, home: 'מקום 14', away: 'מקום 12', time: '03/04/27' }
+  ],
+  30: [
+    { id: 1, home: 'מקום 6', away: 'מקום 5', time: '10/04/27' },
+    { id: 2, home: 'מקום 1', away: 'מקום 4', time: '10/04/27' },
+    { id: 3, home: 'מקום 2', away: 'מקום 3', time: '10/04/27' },
+    { id: 4, home: 'מקום 11', away: 'מקום 12', time: '10/04/27' },
+    { id: 5, home: 'מקום 13', away: 'מקום 14', time: '10/04/27' },
+    { id: 6, home: 'מקום 7', away: 'מקום 10', time: '10/04/27' },
+    { id: 7, home: 'מקום 8', away: 'מקום 9', time: '10/04/27' }
+  ],
+  31: [
+    { id: 1, home: 'מקום 3', away: 'מקום 6', time: '17/04/27' },
+    { id: 2, home: 'מקום 4', away: 'מקום 2', time: '17/04/27' },
+    { id: 3, home: 'מקום 5', away: 'מקום 1', time: '17/04/27' },
+    { id: 4, home: 'מקום 9', away: 'מקום 11', time: '17/04/27' },
+    { id: 5, home: 'מקום 10', away: 'מקום 8', time: '17/04/27' },
+    { id: 6, home: 'מקום 14', away: 'מקום 7', time: '17/04/27' },
+    { id: 7, home: 'מקום 12', away: 'מקום 13', time: '17/04/27' }
+  ],
+  32: [
+    { id: 1, home: 'מקום 6', away: 'מקום 1', time: '24/04/27' },
+    { id: 2, home: 'מקום 5', away: 'מקום 2', time: '24/04/27' },
+    { id: 3, home: 'מקום 4', away: 'מקום 3', time: '24/04/27' },
+    { id: 4, home: 'מקום 11', away: 'מקום 13', time: '24/04/27' },
+    { id: 5, home: 'מקום 7', away: 'מקום 12', time: '24/04/27' },
+    { id: 6, home: 'מקום 8', away: 'מקום 14', time: '24/04/27' },
+    { id: 7, home: 'מקום 9', away: 'מקום 10', time: '24/04/27' }
+  ],
+  33: [
+    { id: 1, home: 'מקום 4', away: 'מקום 6', time: '01/05/27' },
+    { id: 2, home: 'מקום 3', away: 'מקום 5', time: '01/05/27' },
+    { id: 3, home: 'מקום 2', away: 'מקום 1', time: '01/05/27' },
+    { id: 4, home: 'מקום 10', away: 'מקום 11', time: '01/05/27' },
+    { id: 5, home: 'מקום 14', away: 'מקום 9', time: '01/05/27' },
+    { id: 6, home: 'מקום 12', away: 'מקום 8', time: '01/05/27' },
+    { id: 7, home: 'מקום 13', away: 'מקום 7', time: '01/05/27' }
+  ],
+  34: [
+    { id: 1, home: 'מקום 6', away: 'מקום 2', time: '08/05/27' },
+    { id: 2, home: 'מקום 1', away: 'מקום 3', time: '08/05/27' },
+    { id: 3, home: 'מקום 5', away: 'מקום 4', time: '08/05/27' }
+  ],
+  35: [
+    { id: 1, home: 'מקום 5', away: 'מקום 6', time: '15/05/27' },
+    { id: 2, home: 'מקום 4', away: 'מקום 1', time: '15/05/27' },
+    { id: 3, home: 'מקום 3', away: 'מקום 2', time: '15/05/27' }
+  ],
+  36: [
+    { id: 1, home: 'מקום 6', away: 'מקום 3', time: '22/05/27' },
+    { id: 2, home: 'מקום 2', away: 'מקום 4', time: '22/05/27' },
+    { id: 3, home: 'מקום 1', away: 'מקום 5', time: '22/05/27' }
   ]
 };
 
@@ -252,22 +332,23 @@ export default function App() {
   const [adminInputPlayer, setAdminInputPlayer] = useState('');
   const [adminInputGoals, setAdminInputGoals] = useState(0);
 
-  // 🕒 פונקציה חכמה לבדיקה האם המשחק חסום לניחושים (החל מיום לפני המשחק)
   const isGameLockedByDate = (dateStr) => {
     if (!dateStr || dateStr === 'יעודכן בהמשך') return false;
     const parts = dateStr.split('/');
     if (parts.length !== 3) return false;
-    
     const day = parseInt(parts[0], 10);
     const month = parseInt(parts[1], 10) - 1;
     const year = 2000 + parseInt(parts[2], 10);
     const gameDate = new Date(year, month, day);
-    
-    // חישוב מועד החסימה: 24 שעות בדיוק לפני יום המשחק (בחצות)
     const lockDate = new Date(gameDate.getTime() - 24 * 60 * 60 * 1000);
     lockDate.setHours(0, 0, 0, 0);
-    
     return new Date() >= lockDate;
+  };
+
+  const isTournamentLocked = () => {
+    const startOfSeason = new Date(2026, 7, 22);
+    startOfSeason.setHours(0, 0, 0, 0);
+    return new Date() >= startOfSeason;
   };
 
   const handlePredict = (gameId, value) => {
@@ -423,7 +504,6 @@ export default function App() {
   return (
     <div className="min-h-screen bg-gray-950 text-white p-4 pb-24" style={{ direction: 'rtl' }}>
       
-      {/* 👑 ראש האתר והתפריט המקובע */}
       <div className="sticky top-0 bg-gray-950/95 backdrop-blur-md pt-2 pb-3 z-50 max-w-md mx-auto border-b border-gray-900/50">
         <header className="text-center py-2">
           <h1 className="text-2xl font-extrabold text-yellow-500 drop-shadow-md">🏆 10 חבר'ה - יוספטל</h1>
@@ -439,16 +519,14 @@ export default function App() {
         </nav>
       </div>
 
-      {/* גוף התוכן הראשי */}
       <div className="max-w-md mx-auto mt-4">
         
-        {/* לשונית 1: משחקים וניחושים */}
         {currentTab === 'predictions' && (
           <div className="space-y-6">
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 shadow-xl">
               <label className="block text-sm font-bold text-gray-400 mb-2">בחר מחזור ליגה:</label>
               <select value={matchday} onChange={(e) => setMatchday(Number(e.target.value))} className="w-full bg-gray-800 p-3 rounded-lg text-white font-bold border border-gray-700 focus:outline-none">
-                {[...Array(26).keys()].map(i => <option key={i+1} value={i+1}>⚽ מחזור {i+1}</option>)}
+                {[...Array(36).keys()].map(i => <option key={i+1} value={i+1}>{i+1 >= 27 ? `🔥 פלייאוף - מחזור ${i+1}` : `⚽ מחזור ${i+1}`}</option>)}
               </select>
             </div>
 
@@ -477,7 +555,6 @@ export default function App() {
                 const gamePrediction = predictions[gameKey] || { winner: '', homeScore: 0, awayScore: 0 };
                 const actual = actualScores[gameKey] || { homeScore: 0, awayScore: 0, winner: 'X', isFinished: false };
                 
-                // 🕒 בדיקה כפולה: האם המשחק חסום בגלל הזמן, או בגלל שהמנהל נעל אותו
                 const isLocked = isGameLockedByDate(game.time) || actual.isFinished;
 
                 let pointsEarned = null;
@@ -491,11 +568,11 @@ export default function App() {
                 return (
                   <div key={game.id} className="bg-gray-900 border border-gray-800 rounded-xl p-4 shadow-md space-y-3">
                     <div className="flex justify-between items-center text-xs text-gray-500 font-semibold">
-                      <span>ליגת העל • {game.time}</span>
+                      <span>{matchday >= 27 ? 'פלייאוף ליגת ווינר' : 'ליגת העל'} • {game.time}</span>
                       {actual.isFinished ? (
                         <span className="bg-red-950 text-red-400 border border-red-900 text-[10px] px-2 py-0.5 rounded-md font-bold">🛑 הסתיים</span>
                       ) : isGameLockedByDate(game.time) ? (
-                        <span className="bg-amber-950 text-amber-400 border border-amber-900 text-[10px] px-2 py-0.5 rounded-md font-bold">🔒 נעול (עבר מועד הניחוש)</span>
+                        <span className="bg-amber-950 text-amber-400 border border-amber-900 text-[10px] px-2 py-0.5 rounded-md font-bold">🔒 נעול</span>
                       ) : null}
                     </div>
                     
@@ -515,7 +592,6 @@ export default function App() {
                       </div>
                     )}
 
-                    {/* ממשק הניחושים (פתוח רק אם המשחק לא חסום) */}
                     {!isLocked ? (
                       <div className="flex justify-between items-center bg-gray-950 p-3 rounded-xl border border-gray-800/80 mt-1">
                         <span className="text-xs font-bold text-gray-400">הניחוש שלך:</span>
@@ -534,13 +610,11 @@ export default function App() {
                         </div>
                       </div>
                     ) : (
-                      // תצוגת הניחוש האישי של המשתמש כשהמשחק נעול
                       <div className="bg-gray-950/40 p-2 text-center rounded-lg border border-gray-900 text-xs text-gray-400">
                         הניחוש השמור שלך: <span className="text-white font-bold">{gamePrediction.winner ? `${gamePrediction.homeScore}-${gamePrediction.awayScore} (${gamePrediction.winner})` : 'לא ניחשת'}</span>
                       </div>
                     )}
 
-                    {/* כפתורי 1 X 2 */}
                     <div className="grid grid-cols-3 gap-2 pt-1">
                       {['1', 'X', '2'].map((option) => (
                         <button key={option} type="button" disabled={isLocked} onClick={() => handlePredict(game.id, option)} className={`py-2 text-xs font-black rounded-lg border transition-all ${gamePrediction.winner === option ? 'bg-yellow-500 border-yellow-500 text-gray-950 scale-105 shadow-md' : 'bg-gray-800 border-gray-700 text-gray-300 disabled:opacity-50'}`}>
@@ -549,7 +623,6 @@ export default function App() {
                       ))}
                     </div>
 
-                    {/* 👁️ פיצ'ר החשיפה החדש: מוצג אוטומטית ברגע שהמשחק ננעל או הסתיים */}
                     {isLocked && (
                       <div className="bg-gray-950 border border-gray-800/80 rounded-xl p-3 mt-2 space-y-1.5">
                         <span className="text-[10px] font-black text-yellow-500 tracking-wide block">👥 ניחושי החבר'ה ביוספטל:</span>
@@ -562,7 +635,6 @@ export default function App() {
                       </div>
                     )}
 
-                    {/* פאנל מנהל מערכת לעדכון תוצאות */}
                     {isAdminMode && (
                       <div className="mt-3 pt-3 border-t border-red-900/40 bg-red-950/20 p-3 rounded-xl border border-red-900/30 space-y-3">
                         <div className="flex justify-between items-center">
@@ -625,16 +697,21 @@ export default function App() {
                   <div className="absolute bottom-1 bg-gray-900/80 p-1 rounded-full text-yellow-500 text-[10px]">📷</div>
                 </div>
                 <h2 className="text-xl font-black text-white mt-3">📝 הניחושים המיוחדים שלי</h2>
+                {isTournamentLocked() && (
+                  <span className="inline-block bg-amber-950 text-amber-400 border border-amber-900 font-bold text-xs px-3 py-1 rounded-full mt-2">
+                    🔒 הניחושים נעולים לכל העונה!
+                  </span>
+                )}
               </div>
               <div className="bg-gray-900 p-5 space-y-5">
                 <div className="bg-gray-950 p-4 rounded-xl border border-gray-800 shadow-md">
                   <label className="block text-sm font-black text-gray-300 mb-2">🏆 האלופה שלי:</label>
-                  <input type="text" value={tournamentPredictions.champion} onChange={(e) => setTournamentPredictions(prev => ({...prev, champion: e.target.value}))} placeholder="הקלד את שם האלופה המשוערת..." className="w-full bg-gray-800 p-3 rounded-lg text-white font-bold border border-gray-700 text-sm focus:outline-none focus:border-yellow-500"/>
+                  <input type="text" disabled={isTournamentLocked()} value={tournamentPredictions.champion} onChange={(e) => setTournamentPredictions(prev => ({...prev, champion: e.target.value}))} placeholder={isTournamentLocked() ? 'הניחוש נעול' : 'הקלד את שם האלופה המשוערת...'} className="w-full bg-gray-800 p-3 rounded-lg text-white font-bold border border-gray-700 text-sm focus:outline-none disabled:opacity-50"/>
                   <div className="text-left text-xs text-yellow-500 font-bold mt-1.5">מענק זכייה בסוף העונה: 40 נקודות</div>
                 </div>
                 <div className="bg-gray-950 p-4 rounded-xl border border-gray-800 shadow-md">
                   <label className="block text-sm font-black text-gray-300 mb-2">👟 מלך השערים שלי:</label>
-                  <input type="text" value={tournamentPredictions.topScorer} onChange={(e) => setTournamentPredictions(prev => ({...prev, topScorer: e.target.value}))} placeholder="הקלד את מלך השערים שלך..." className="w-full bg-gray-800 p-3 rounded-lg text-white font-bold border border-gray-700 text-sm focus:outline-none focus:border-yellow-500"/>
+                  <input type="text" disabled={isTournamentLocked()} value={tournamentPredictions.topScorer} onChange={(e) => setTournamentPredictions(prev => ({...prev, topScorer: e.target.value}))} placeholder={isTournamentLocked() ? 'הניחוש נעול' : 'הקלד את מלך השערים שלך...'} className="w-full bg-gray-800 p-3 rounded-lg text-white font-bold border border-gray-700 text-sm focus:outline-none disabled:opacity-50"/>
                   <div className="flex justify-between text-[11px] font-bold mt-2 border-t border-gray-900 pt-2">
                     <span className="text-gray-400">מענק סופי: 40 נק'</span>
                     <span className="text-yellow-500 font-black">🔥 נצבר במחזורים: +{goalsPoints} נק'</span>
@@ -642,12 +719,16 @@ export default function App() {
                 </div>
                 <div className="bg-gray-950 p-4 rounded-xl border border-gray-800 shadow-md">
                   <label className="block text-sm font-black text-gray-300 mb-2">🎯 מלך הבישולים שלי:</label>
-                  <input type="text" value={tournamentPredictions.topAssists} onChange={(e) => setTournamentPredictions(prev => ({...prev, topAssists: e.target.value}))} placeholder="הקלד את מלך הבישולים שלך..." className="w-full bg-gray-800 p-3 rounded-lg text-white font-bold border border-gray-700 text-sm focus:outline-none focus:border-yellow-500"/>
+                  <input type="text" disabled={isTournamentLocked()} value={tournamentPredictions.topAssists} onChange={(e) => setTournamentPredictions(prev => ({...prev, topAssists: e.target.value}))} placeholder={isTournamentLocked() ? 'הניחוש נעול' : 'הקלד את מלך הבישולים שלך...'} className="w-full bg-gray-800 p-3 rounded-lg text-white font-bold border border-gray-700 text-sm focus:outline-none disabled:opacity-50"/>
                   <div className="text-left text-xs text-yellow-500 font-bold mt-1.5">מענק ניחוש סופי: 50 נקודות</div>
                 </div>
               </div>
               <div className="bg-gray-950 p-4 text-center border-t border-gray-800">
-                <button type="button" onClick={() => alert('הניחושים הארוכים עודכנו בהצלחה!')} className="w-full bg-[#1e3d2f] text-white font-black py-3 rounded-xl border border-[#2a5441]">שמור שינויים</button>
+                {!isTournamentLocked() ? (
+                  <button type="button" onClick={() => alert('הניחושים הארוכים עודכנו בהצלחה!')} className="w-full bg-[#1e3d2f] text-white font-black py-3 rounded-xl border border-[#2a5441]">שמור שינויים</button>
+                ) : (
+                  <div className="text-xs text-gray-500 font-bold py-2">🔒 נעול – לא ניתן לבצע שינויים עד סוף העונה</div>
+                )}
               </div>
             </div>
           </div>
@@ -762,8 +843,9 @@ export default function App() {
               <div className="border-t border-gray-800 pt-3 mt-3">
                 <h3 className="text-white font-black text-sm mb-1">🔥 חוקי שחקנים ומענקים מיוחדים:</h3>
                 <ul className="list-disc list-inside space-y-1 text-gray-400 mr-2">
-                  <li><span className="text-yellow-500 font-bold">נעילת הימורים:</span> לא ניתן לנחש או לשנות ניחוש החל מיום שלפני המשחק (ב-00:00 בלילה).</li>
-                  <li><span className="text-yellow-500 font-bold">חשיפת ניחושים:</span> ברגע שמשחק ננעל, כולם יכולים לראות את הניחושים של כולם בשידור חי!</li>
+                  <li><span className="text-yellow-500 font-bold">נעילת הימורים מחזוריים:</span> לא ניתן לנחש או לשנות ניחוש של משחק החל מיום שלפני המשחק (ב-00:00 בלילה).</li>
+                  <li><span className="text-yellow-500 font-bold">🔒 נעילת הטורניר שלי:</span> הבחירות לאלופה, מלך שערים ומלך בישולים יינעלו לחלוטין ברגע שהמחזור הראשון ייפתח, ללא שום אפשרות לשינוי עד סיום העונה!</li>
+                  <li><span className="text-yellow-500 font-bold">חשיפת ניחושים:</span> ברגע שמשחק ננעל, כולם יכולים לראות את הניחושים של כולם בלייב!</li>
                   <li><span className="text-yellow-500 font-bold">ריצה במחזורים:</span> בכל פעם ששחקן שנבחר כמלך השערים מבקיע גול במחזור, המשתמש מקבל <span className="text-yellow-500 font-bold">2 נקודות לכל גול</span> באותו רגע!</li>
                   <li><span className="text-white font-bold">👑 ניחוש מלך השערים הסופי:</span> מעניק <span className="text-white font-bold">40 נקודות</span> בסוף העונה.</li>
                   <li><span className="text-white font-bold">👑 ניחוש האלופה הסופית:</span> מעניק <span className="text-white font-bold">40 נקודות</span> בסוף העונה.</li>
