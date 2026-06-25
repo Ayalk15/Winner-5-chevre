@@ -107,7 +107,7 @@ const allFixtures = {
     { id: 3, home: 'עירוני דורות טבריה', away: 'הפועל ר"ג', time: '01/12/26' },
     { id: 4, home: 'הפועל י-ם', away: 'הפועל חיפה', time: '01/12/26' },
     { id: 5, home: 'בית"ר י-ם', away: 'מכבי חיפה', time: '01/12/26' },
-    { id: 6, home: 'בני סכנין', away: 'הפועל ב"ש', time: '01/12/26' },
+    { id: 6, home: 'bני סכנין', away: 'הפועל ב"ש', time: '01/12/26' },
     { id: 7, home: 'מכבי נתניה', away: 'הפועל ת"א', time: '01/12/26' }
   ],
   13: [
@@ -239,36 +239,26 @@ const allFixtures = {
 };
 
 export default function App() {
+  const [currentTab, setCurrentTab] = useState('predictions'); // לשונית נוכחית
   const [matchday, setMatchday] = useState(1);
   const [predictions, setPredictions] = useState({});
 
-  // עדכון הניחוש הידני 1 X 2
   const handlePredict = (gameId, value) => {
     setPredictions(prev => {
       const key = `${matchday}-${gameId}`;
       const current = prev[key] || { winner: '', homeScore: 0, awayScore: 0 };
-      return {
-        ...prev,
-        [key]: { ...current, winner: value }
-      };
+      return { ...prev, [key]: { ...current, winner: value } };
     });
   };
 
-  // עדכון התוצאה המדויקת וחישוב אוטומטי של המנצחת
   const handleScoreChange = (gameId, type, delta) => {
     setPredictions(prev => {
       const key = `${matchday}-${gameId}`;
       const current = prev[key] || { winner: '', homeScore: 0, awayScore: 0 };
-      
       let newScore = current[type === 'home' ? 'homeScore' : 'awayScore'] + delta;
-      if (newScore < 0) newScore = 0; // מניעת תוצאה שלילית של שערים
+      if (newScore < 0) newScore = 0;
 
-      const updated = {
-        ...current,
-        [type === 'home' ? 'homeScore' : 'awayScore']: newScore
-      };
-
-      // חישוב אוטומטי של המנצחת לפי השערים
+      const updated = { ...current, [type === 'home' ? 'homeScore' : 'awayScore']: newScore };
       if (updated.homeScore > updated.awayScore) updated.winner = '1';
       else if (updated.homeScore < updated.awayScore) updated.winner = '2';
       else updated.winner = 'X';
@@ -277,7 +267,6 @@ export default function App() {
     });
   };
 
-  // טבלת מובילים זמנית (עד לחיבור בסיס הנתונים)
   const leaderboard = [
     { name: 'אילן', points: 18 },
     { name: 'דודו', points: 15 },
@@ -287,137 +276,195 @@ export default function App() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white p-4 pb-10" style={{ direction: 'rtl' }}>
+    <div className="min-h-screen bg-gray-950 text-white p-4 pb-12" style={{ direction: 'rtl' }}>
       {/* כותרת ראשית */}
-      <header className="max-w-md mx-auto text-center py-6 border-b border-gray-800">
+      <header className="max-w-md mx-auto text-center py-5 border-b border-gray-800">
         <h1 className="text-3xl font-extrabold text-yellow-500 drop-shadow-md">
-          🏆 5 חבר'ה – ווינר ליגת העל
+          🏆 5 חבר'ה – ווינר
         </h1>
-        <p className="text-gray-400 text-sm mt-2">טבלת הניחושים הרשמית של הקבוצה</p>
       </header>
 
-      <main className="max-w-md mx-auto mt-6 space-y-6">
-        
-        {/* טבלת מובילים */}
-        <section className="bg-gray-900 border border-gray-800 rounded-xl p-4 shadow-xl">
-          <h2 className="text-lg font-bold text-gray-200 mb-3">📊 מצב הטבלה</h2>
-          <div className="overflow-hidden rounded-lg border border-gray-800">
-            <table className="w-full text-right border-collapse">
-              <thead>
-                <tr className="bg-gray-800 text-gray-400 text-xs">
-                  <th className="p-3">שם המנחש</th>
-                  <th className="p-3 text-center">נקודות</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-800">
-                {leaderboard.map((user, idx) => (
-                  <tr key={idx} className="hover:bg-gray-800/50">
-                    <td className="p-3 font-medium text-gray-300">
-                      {idx === 0 ? '👑 ' : ''}{user.name}
-                    </td>
-                    <td className="p-3 text-center font-bold text-yellow-500">{user.points}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        {/* בורר מחזורים */}
-        <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 shadow-xl">
-          <label className="block text-sm font-bold text-gray-400 mb-2">בחר מחזור ליגה:</label>
-          <select 
-            value={matchday} 
-            onChange={(e) => setMatchday(Number(e.target.value))}
-            className="w-full bg-gray-800 p-3 rounded-lg text-white font-bold border border-gray-700 focus:outline-none focus:border-yellow-500"
-          >
-            {[...Array(26).keys()].map(i => (
-              <option key={i+1} value={i+1}>⚽ מחזור {i+1}</option>
-            ))}
-          </select>
-        </div>
-
-        {/* משחקים לניחוש לפי המחזור שנבחר */}
-        <section className="space-y-4">
-          <h2 className="text-xl font-extrabold text-gray-200">
-            📊 משחקי מחזור {matchday}
-          </h2>
-          
-          {allFixtures[matchday]?.map((game) => {
-            const gamePrediction = predictions[`${matchday}-${game.id}`] || { winner: '', homeScore: 0, awayScore: 0 };
-            return (
-              <div key={game.id} className="bg-gray-900 border border-gray-800 rounded-xl p-4 shadow-md space-y-3">
-                <div className="flex justify-between text-xs text-gray-500 font-semibold">
-                  <span>ליגת העל</span>
-                  <span>{game.time}</span>
-                </div>
-                
-                {/* שמות הקבוצות */}
-                <div className="flex justify-between items-center py-1">
-                  <span className="font-bold text-base text-gray-100 w-5/12 text-right break-words">{game.home}</span>
-                  <span className="text-gray-600 text-xs font-black px-2">VS</span>
-                  <span className="font-bold text-base text-gray-100 w-5/12 text-left break-words">{game.away}</span>
-                </div>
-
-                {/* מערכת בחירת תוצאה מדויקת עם פלוס ומינוס */}
-                <div className="flex justify-between items-center bg-gray-950 p-3 rounded-xl border border-gray-800/80 mt-1">
-                  <span className="text-xs font-bold text-gray-400">תוצאה מדויקת:</span>
-                  <div className="flex items-center gap-3" style={{ direction: 'ltr' }}>
-                    
-                    {/* מחוונים לקבוצת החוץ */}
-                    <div className="flex items-center bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
-                      <button type="button" onClick={() => handleScoreChange(game.id, 'away', -1)} className="px-2.5 py-1 text-gray-400 hover:bg-gray-750 hover:text-white font-black text-sm">-</button>
-                      <span className="px-3 py-1 font-black text-yellow-500 min-w-[28px] text-center bg-gray-900 text-base border-x border-gray-700">
-                        {gamePrediction.awayScore}
-                      </span>
-                      <button type="button" onClick={() => handleScoreChange(game.id, 'away', 1)} className="px-2.5 py-1 text-gray-400 hover:bg-gray-750 hover:text-white font-black text-sm">+</button>
-                    </div>
-                    
-                    <span className="text-gray-600 font-black text-sm">:</span>
-                    
-                    {/* מחוונים לקבוצת הבית */}
-                    <div className="flex items-center bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
-                      <button type="button" onClick={() => handleScoreChange(game.id, 'home', -1)} className="px-2.5 py-1 text-gray-400 hover:bg-gray-750 hover:text-white font-black text-sm">-</button>
-                      <span className="px-3 py-1 font-black text-yellow-500 min-w-[28px] text-center bg-gray-900 text-base border-x border-gray-700">
-                        {gamePrediction.homeScore}
-                      </span>
-                      <button type="button" onClick={() => handleScoreChange(game.id, 'home', 1)} className="px-2.5 py-1 text-gray-400 hover:bg-gray-750 hover:text-white font-black text-sm">+</button>
-                    </div>
-
-                  </div>
-                </div>
-
-                {/* כפתורי ווינר 1 X 2 */}
-                <div className="grid grid-cols-3 gap-2 pt-1">
-                  {['1', 'X', '2'].map((option) => {
-                    const isSelected = gamePrediction.winner === option;
-                    return (
-                      <button
-                        key={option}
-                        onClick={() => handlePredict(game.id, option)}
-                        className={`py-2 text-xs font-black rounded-lg border transition-all ${
-                          isSelected
-                            ? 'bg-yellow-500 border-yellow-500 text-gray-950 scale-105 shadow-md'
-                            : 'bg-gray-800 border-gray-700 text-gray-300 hover:bg-gray-750'
-                        }`}
-                      >
-                        {option === '1' ? '1 (בית)' : option === 'X' ? 'X (תיקו)' : '2 (חוץ)'}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            );
-          })}
-        </section>
-
-        {/* כפתור שמירה */}
-        <button 
-          onClick={() => alert('המשחקים והתוצאות עודכנו בהצלחה! השלב הבא הוא קישור ל-Firebase כדי להפוך אותו לאתר חי באמת.')}
-          className="w-full bg-gradient-to-r from-yellow-500 to-amber-600 text-gray-950 font-black py-3.5 rounded-xl shadow-lg hover:brightness-110 active:scale-95 transition-all text-center block text-lg mt-8"
+      {/* תפריט לשוניות עליון (Tabs) */}
+      <nav className="max-w-md mx-auto mt-4 grid grid-cols-3 gap-1 bg-gray-900 p-1.5 rounded-xl border border-gray-800">
+        <button
+          onClick={() => setCurrentTab('predictions')}
+          className={`py-2 text-xs font-black rounded-lg transition-all ${currentTab === 'predictions' ? 'bg-yellow-500 text-gray-950 shadow-md' : 'text-gray-400 hover:text-white'}`}
         >
-          💾 שמור את הניחושים שלי
+          ⚽ ניחושים
         </button>
+        <button
+          onClick={() => setCurrentTab('leaderboard')}
+          className={`py-2 text-xs font-black rounded-lg transition-all ${currentTab === 'leaderboard' ? 'bg-yellow-500 text-gray-950 shadow-md' : 'text-gray-400 hover:text-white'}`}
+        >
+          📊 טבלה
+        </button>
+        <button
+          onClick={() => setCurrentTab('rules')}
+          className={`py-2 text-xs font-black rounded-lg transition-all ${currentTab === 'rules' ? 'bg-yellow-500 text-gray-950 shadow-md' : 'text-gray-400 hover:text-white'}`}
+        >
+          ℹ️ על המשחק
+        </button>
+      </nav>
+
+      <main className="max-w-md mx-auto mt-6">
+        
+        {/* לשונית 1: ניחושים */}
+        {currentTab === 'predictions' && (
+          <div className="space-y-6">
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 shadow-xl">
+              <label className="block text-sm font-bold text-gray-400 mb-2">בחר מחזור ליגה:</label>
+              <select 
+                value={matchday} 
+                onChange={(e) => setMatchday(Number(e.target.value))}
+                className="w-full bg-gray-800 p-3 rounded-lg text-white font-bold border border-gray-700 focus:outline-none focus:border-yellow-500"
+              >
+                {[...Array(26).keys()].map(i => (
+                  <option key={i+1} value={i+1}>⚽ מחזור {i+1}</option>
+                ))}
+              </select>
+            </div>
+
+            <section className="space-y-4">
+              <h2 className="text-xl font-extrabold text-gray-200">📊 משחקי מחזור {matchday}</h2>
+              {allFixtures[matchday]?.map((game) => {
+                const gamePrediction = predictions[`${matchday}-${game.id}`] || { winner: '', homeScore: 0, awayScore: 0 };
+                return (
+                  <div key={game.id} className="bg-gray-900 border border-gray-800 rounded-xl p-4 shadow-md space-y-3">
+                    <div className="flex justify-between text-xs text-gray-500 font-semibold">
+                      <span>ליגת העל</span><span>{game.time}</span>
+                    </div>
+                    <div className="flex justify-between items-center py-1">
+                      <span className="font-bold text-base text-gray-100 w-5/12 text-right break-words">{game.home}</span>
+                      <span className="text-gray-600 text-xs font-black px-2">VS</span>
+                      <span className="font-bold text-base text-gray-100 w-5/12 text-left break-words">{game.away}</span>
+                    </div>
+
+                    <div className="flex justify-between items-center bg-gray-950 p-3 rounded-xl border border-gray-800/80 mt-1">
+                      <span className="text-xs font-bold text-gray-400">תוצאה מדויקת:</span>
+                      <div className="flex items-center gap-3" style={{ direction: 'ltr' }}>
+                        <div className="flex items-center bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+                          <button type="button" onClick={() => handleScoreChange(game.id, 'away', -1)} className="px-2.5 py-1 text-gray-400 hover:text-white font-black text-sm">-</button>
+                          <span className="px-3 py-1 font-black text-yellow-500 min-w-[28px] text-center bg-gray-900 text-base border-x border-gray-700">{gamePrediction.awayScore}</span>
+                          <button type="button" onClick={() => handleScoreChange(game.id, 'away', 1)} className="px-2.5 py-1 text-gray-400 hover:text-white font-black text-sm">+</button>
+                        </div>
+                        <span className="text-gray-600 font-black text-sm">:</span>
+                        <div className="flex items-center bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+                          <button type="button" onClick={() => handleScoreChange(game.id, 'home', -1)} className="px-2.5 py-1 text-gray-400 hover:text-white font-black text-sm">-</button>
+                          <span className="px-3 py-1 font-black text-yellow-500 min-w-[28px] text-center bg-gray-900 text-base border-x border-gray-700">{gamePrediction.homeScore}</span>
+                          <button type="button" onClick={() => handleScoreChange(game.id, 'home', 1)} className="px-2.5 py-1 text-gray-400 hover:text-white font-black text-sm">+</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-2 pt-1">
+                      {['1', 'X', '2'].map((option) => (
+                        <button
+                          key={option}
+                          onClick={() => handlePredict(game.id, option)}
+                          className={`py-2 text-xs font-black rounded-lg border transition-all ${gamePrediction.winner === option ? 'bg-yellow-500 border-yellow-500 text-gray-950 scale-105 shadow-md' : 'bg-gray-800 border-gray-700 text-gray-300 hover:bg-gray-750'}`}
+                        >
+                          {option === '1' ? '1 (בית)' : option === 'X' ? 'X (תיקו)' : '2 (חוץ)'}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </section>
+
+            <button onClick={() => alert('הניחושים נשמרו זמנית!')} className="w-full bg-gradient-to-r from-yellow-500 to-amber-600 text-gray-950 font-black py-3.5 rounded-xl shadow-lg hover:brightness-110 text-center block text-lg">
+              💾 שמור את הניחושים שלי
+            </button>
+          </div>
+        )}
+
+        {/* לשונית 2: טבלת מובילים */}
+        {currentTab === 'leaderboard' && (
+          <section className="bg-gray-900 border border-gray-800 rounded-xl p-4 shadow-xl">
+            <h2 className="text-lg font-bold text-gray-200 mb-3">📊 מצב הטבלה הכללית</h2>
+            <div className="overflow-hidden rounded-lg border border-gray-800">
+              <table className="w-full text-right border-collapse">
+                <thead>
+                  <tr className="bg-gray-800 text-gray-400 text-xs">
+                    <th className="p-3">שם המנחש</th>
+                    <th className="p-3 text-center">נקודות</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-800">
+                  {leaderboard.map((user, idx) => (
+                    <tr key={idx} className="hover:bg-gray-800/50">
+                      <td className="p-3 font-medium text-gray-300">{idx === 0 ? '👑 ' : ''}{user.name}</td>
+                      <td className="p-3 text-center font-bold text-yellow-500">{user.points}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        )}
+
+        {/* לשונית 3: חוקים ומידע (התוכן שלך) */}
+        {currentTab === 'rules' && (
+          <div className="space-y-6 text-gray-300 text-sm leading-relaxed">
+            
+            {/* כרטיסייה 1: על המשחק */}
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 shadow-md">
+              <h2 className="text-yellow-500 font-black text-lg mb-2 flex items-center gap-2">📱 על המשחק</h2>
+              <p>בואו לנחש עם כל החבר'ה מי ינצח, מי יהיה הכובש המצטיין ומי תזכה בטורניר הקרוב.</p>
+              <p className="mt-2 text-gray-400">על מנת לנחש את תוצאת המשחק, הזינו את התוצאה המשוערת במרכז שדה המשחק באמצעות כפתורי ה- (+) וה- (-) ולחצו "שמור".</p>
+            </div>
+
+            {/* כרטיסייה 2: איך יוצרים קבוצה */}
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 shadow-md">
+              <h2 className="text-yellow-500 font-black text-lg mb-2 flex items-center gap-2">👥 איך יוצרים קבוצה?</h2>
+              <p>תחת לשונית <span className="text-white font-bold">"החבר'ה שלי"</span> תוכלו ליצור ולנהל קבוצות חברים.</p>
+              <p className="mt-1">לאחר יצירת הקבוצה תוכלו לבחור לה שם ותמונת פרופיל ולהתחיל להזמין חברים דרך הווטסאפ והמייל. תוכלו גם להעתיק את הקישור הייחודי לקבוצה שלכם ולשתף אותה בקלות.</p>
+            </div>
+
+            {/* כרטיסייה 3: שיטת הניקוד */}
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 shadow-md space-y-4">
+              <h2 className="text-yellow-500 font-black text-lg border-b border-gray-800 pb-2 flex items-center gap-2">🎯 שיטת הניקוד</h2>
+              
+              <div>
+                <h3 className="text-white font-black text-sm mb-1">⚽ עבור משחק בשלב הבתים:</h3>
+                <ul className="list-disc list-inside space-y-1 text-gray-400 mr-2">
+                  <li><span className="text-gray-200 font-bold">ניחוש כיוון:</span> אם פגעתם בזהות המנצחת או בתיקו אך לא בתוצאה המדויקת – תקבלו את הניקוד הבסיסי ללא בונוס.</li>
+                  <li><span className="text-yellow-500 font-bold">ניחוש מדויק:</span> אם פגעתם במדויק בתוצאה – תקבלו <span className="text-yellow-500 font-bold">4 נק' בונוס</span> שיתווספו לניקוד המשחק.</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-white font-black text-sm mb-1">🔥 עבור משחק בשלב הנוקאאוט:</h3>
+                <ul className="list-disc list-inside space-y-1 text-gray-400 mr-2">
+                  <li><span className="text-gray-200 font-bold">ניחוש כיוון:</span> הניקוד הבסיסי של המשחק <span className="text-white font-bold">יוכפל פי 2</span> (ולא יינתן בונוס נוסף).</li>
+                  <li><span className="text-yellow-500 font-bold">ניחוש מדויק:</span> הניקוד הבסיסי <span className="text-white font-bold">יוכפל פי 2</span> ובנוסף תקבלו <span className="text-yellow-500 font-bold">6 נק' בונוס</span>!</li>
+                </ul>
+              </div>
+            </div>
+
+            {/* כרטיסייה 4: נבחרת זוכה ומלך שערים */}
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 shadow-md space-y-3">
+              <h2 className="text-yellow-500 font-black text-lg flex items-center gap-2">👑 מענקי הטורניר הקבועים</h2>
+              <p className="text-xs text-gray-400">בתחילת המשחק תתבקשו לבחור את הנבחרת/קבוצה הזוכה ואת הכובש המצטיין:</p>
+              
+              <div className="bg-gray-950 p-3 rounded-lg border border-gray-800">
+                <span className="text-white font-bold block mb-1">🏆 עבור הקבוצה הזוכה:</span>
+                <p className="text-gray-400 text-xs">במידה והיא אכן תזכה, תקבלו מענק בהתאם ליחס שניתן לה לפני תחילת הטורניר (לפי הסיכויים ההתחלתיים).</p>
+              </div>
+
+              <div className="bg-gray-950 p-3 rounded-lg border border-gray-800">
+                <span className="text-white font-bold block mb-1">👟 עבור הכובש המצטיין:</span>
+                <p className="text-gray-400 text-xs">צבירת נקודות חיה על המגרש: <span className="text-white">2 נק'</span> על כל גול בבתים, <span className="text-white">3 נק'</span> על גול בנוקאאוט, ובונוס ענק של <span className="text-yellow-500 font-bold">20 נקודות</span> אם הוא יסיים כמלך השערים של הטורניר!</p>
+              </div>
+
+              <p className="text-xs text-amber-500 font-bold bg-amber-950/40 p-2.5 rounded-lg border border-amber-900/50 mt-2">
+                ⚠️ שימו לב! הבחירות עבור מלך השערים והקבוצה הזוכה יינעלו לחלוטין חצי שעה לפני משחק הפתיחה של הטורניר!
+              </p>
+            </div>
+
+          </div>
+        )}
+
       </main>
     </div>
   );
