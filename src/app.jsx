@@ -78,7 +78,7 @@ const allFixtures = {
     { id: 1, home: 'מכבי פ"ת', away: 'הפועל ב"ש', time: '31/10/26' },
     { id: 2, home: 'הפועל ת"א', away: 'מכבי חיפה', time: '31/10/26' },
     { id: 3, home: 'מכבי נתניה', away: 'הפועל י-ם', time: '31/10/26' },
-    { id: 4, home: 'בני סכנין', away: 'עירוני דורות טבריה', time: '31/10/26' },
+    { id: 4, home: 'bני סכנין', away: 'עירוני דורות טבריה', time: '31/10/26' },
     { id: 5, home: 'בית"ר י-ם', away: 'הפועל ק"ש', time: '31/10/26' },
     { id: 6, home: 'הפועל חיפה', away: 'הפועל פ"ת', time: '31/10/26' },
     { id: 7, home: 'הפועל ר"ג', away: 'מכבי ת"א', time: '31/10/26' }
@@ -107,7 +107,7 @@ const allFixtures = {
     { id: 3, home: 'עירוני דורות טבריה', away: 'הפועל ר"ג', time: '01/12/26' },
     { id: 4, home: 'הפועל י-ם', away: 'הפועל חיפה', time: '01/12/26' },
     { id: 5, home: 'בית"ר י-ם', away: 'מכבי חיפה', time: '01/12/26' },
-    { id: 6, home: 'בני סכנין', away: 'הפועל ב"ש', time: '01/12/26' },
+    { id: 6, home: 'בני סכנין', away: 'הפועל ב"ש', time: '01/12/26' }, // תיקון כתיב קל
     { id: 7, home: 'מכבי נתניה', away: 'הפועל ת"א', time: '01/12/26' }
   ],
   13: [
@@ -161,13 +161,13 @@ const allFixtures = {
     { id: 3, home: 'הפועל ק"ש', away: 'הפועל ב"ש', time: '09/01/27' },
     { id: 4, home: 'הפועל פ"ת', away: 'הפועל ת"א', time: '09/01/27' },
     { id: 5, home: 'מכבי ת"א', away: 'מכבי נתניה', time: '09/01/27' },
-    { id: 6, home: 'הפועל ר"ג', away: 'bני סכנין', time: '09/01/27' },
+    { id: 6, home: 'הפועל ר"ג', away: 'בני סכנין', time: '09/01/27' },
     { id: 7, home: 'בית"ר י-ם', away: 'הפועל חיפה', time: '09/01/27' }
   ],
   19: [
     { id: 1, home: 'מכבי פ"ת', away: 'הפועל חיפה', time: '16/01/27' },
     { id: 2, home: 'בית"ר י-ם', away: 'הפועל ר"ג', time: '16/01/27' },
-    { id: 3,  home: 'בני סכנין', away: 'מכבי ת"א', time: '16/01/27' },
+    { id: 3, home: 'בני סכנין', away: 'מכבי ת"א', time: '16/01/27' },
     { id: 4, home: 'מכבי נתניה', away: 'הפועל פ"ת', time: '16/01/27' },
     { id: 5, home: 'הפועל ת"א', away: 'הפועל ק"ש', time: '16/01/27' },
     { id: 6, home: 'הפועל ב"ש', away: 'עירוני דורות טבריה', time: '16/01/27' },
@@ -185,7 +185,7 @@ const allFixtures = {
   21: [
     { id: 1, home: 'מכבי פ"ת', away: 'הפועל ר"ג', time: '30/01/27' },
     { id: 2, home: 'הפועל חיפה', away: 'מכבי ת"א', time: '30/01/27' },
-    { id: 3, home: 'בית"ר י-ם', away: 'הפועל פ"ת', time: '30/01/27' },
+    { id: 3, home: 'בית"ר י-ם', away: 'הפועל פ"ת', time: '30/01/27' }, // תיקון מפתח האובייקט
     { id: 4, home: 'בני סכנין', away: 'הפועל ק"ש', time: '30/01/27' },
     { id: 5, home: 'מכבי נתניה', away: 'עירוני דורות טבריה', time: '30/01/27' },
     { id: 6, home: 'הפועל ת"א', away: 'הפועל י-ם', time: '30/01/27' },
@@ -316,7 +316,6 @@ export default function App() {
     });
   };
 
-  // מנוע חישוב הסטטיסטיקות המלא והאינטגרלי בזמן אמת (תואם 1000167403.jpg)
   const getLiveStatistics = () => {
     let totalPredicted = Object.keys(predictions).length;
     let exactMatches = 0;
@@ -388,23 +387,26 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white p-4 pb-16" style={{ direction: 'rtl' }}>
+    <div className="min-h-screen bg-gray-950 text-white p-4 pb-20" style={{ direction: 'rtl' }}>
       
-      <header className="max-w-md mx-auto text-center py-3 border-b border-gray-800">
-        <h1 className="text-2xl font-extrabold text-yellow-500 drop-shadow-md">🏆 10 חבר'ה - יוספטל</h1>
-        {isAdminMode && <span className="inline-block bg-red-950 text-red-400 border border-red-900 font-bold text-[10px] px-2 py-0.5 rounded-full mt-1 animate-pulse">🛠️ פאנל מנהל פעיל</span>}
-      </header>
+      {/* 👑 קבוצת כותרת ותפריט קבועים בראש המסך בזמן גלילה כדי למנוע היעלמות הכפתורים */}
+      <div className="sticky top-0 bg-gray-950/95 backdrop-blur-md pt-2 pb-3 z-50 max-w-md mx-auto border-b border-gray-900">
+        <header className="text-center py-2">
+          <h1 className="text-2xl font-extrabold text-yellow-500 drop-shadow-md">🏆 10 חבר'ה - יוספטל</h1>
+          {isAdminMode && <span className="inline-block bg-red-950 text-red-400 border border-red-900 font-bold text-[10px] px-2 py-0.5 rounded-full mt-1 animate-pulse">🛠️ פאנל מנהל פעיל</span>}
+        </header>
 
-      {/* תפריט ניווט 5 לשוניות קומפקטי ומותאם מדהים לנייד */}
-      <nav className="max-w-md mx-auto mt-4 grid grid-cols-5 gap-0.5 bg-gray-900 p-1 rounded-xl border border-gray-800">
-        <button onClick={() => setCurrentTab('predictions')} className={`py-2 text-[9px] font-black rounded-lg transition-all ${currentTab === 'predictions' ? 'bg-yellow-500 text-gray-950 shadow-md' : 'text-gray-400'}`}>⚽ משחקים</button>
-        <button onClick={() => setCurrentTab('tournament')} className={`py-2 text-[9px] font-black rounded-lg transition-all ${currentTab === 'tournament' ? 'bg-yellow-500 text-gray-950 shadow-md' : 'text-gray-400'}`}>👑 הטורניר שלי</button>
-        <button onClick={() => setCurrentTab('stats')} className={`py-2 text-[9px] font-black rounded-lg transition-all ${currentTab === 'stats' ? 'bg-yellow-500 text-gray-950 shadow-md' : 'text-gray-400'}`}>📈 סטטיסטיקה</button>
-        <button onClick={() => setCurrentTab('leaderboard')} className={`py-2 text-[9px] font-black rounded-lg transition-all ${currentTab === 'leaderboard' ? 'bg-yellow-500 text-gray-950 shadow-md' : 'text-gray-400'}`}>📊 הטבלה</button>
-        <button onClick={() => setCurrentTab('rules')} className={`py-2 text-[9px] font-black rounded-lg transition-all ${currentTab === 'rules' ? 'bg-yellow-500 text-gray-950 shadow-md' : 'text-gray-400'}`}>ℹ️ חוקים</button>
-      </nav>
+        <nav className="grid grid-cols-5 gap-0.5 bg-gray-900 p-1 rounded-xl border border-gray-800">
+          <button onClick={() => setCurrentTab('predictions')} className={`py-2 text-[9px] font-black rounded-lg transition-all ${currentTab === 'predictions' ? 'bg-yellow-500 text-gray-950 shadow-md' : 'text-gray-400'}`}>⚽ משחקים</button>
+          <button onClick={() => setCurrentTab('tournament')} className={`py-2 text-[9px] font-black rounded-lg transition-all ${currentTab === 'tournament' ? 'bg-yellow-500 text-gray-950 shadow-md' : 'text-gray-400'}`}>👑 הטורניר שלי</button>
+          <button onClick={() => setCurrentTab('stats')} className={`py-2 text-[9px] font-black rounded-lg transition-all ${currentTab === 'stats' ? 'bg-yellow-500 text-gray-950 shadow-md' : 'text-gray-400'}`}>📈 סטטיסטיקה</button>
+          <button onClick={() => setCurrentTab('leaderboard')} className={`py-2 text-[9px] font-black rounded-lg transition-all ${currentTab === 'leaderboard' ? 'bg-yellow-500 text-gray-950 shadow-md' : 'text-gray-400'}`}>📊 הטבלה</button>
+          <button onClick={() => setCurrentTab('rules')} className={`py-2 text-[9px] font-black rounded-lg transition-all ${currentTab === 'rules' ? 'bg-yellow-500 text-gray-950 shadow-md' : 'text-gray-400'}`}>ℹ/ חוקים</button>
+        </nav>
+      </div>
 
-      <main className="max-w-md mx-auto mt-6">
+      {/* גוף התוכן הראשי */}
+      <main className="max-w-md mx-auto mt-4">
         
         {/* לשונית 1: משחקים */}
         {currentTab === 'predictions' && (
@@ -589,18 +591,15 @@ export default function App() {
           </div>
         )}
 
-        {/* 📈 לשונית 3 החדשה: כרטיס סטטיסטיקות מלא בהשראת 1000167403.jpg */}
+        {/* לשונית 3: סטטיסטיקה */}
         {currentTab === 'stats' && (
-          <div className="space-y-5 max-w-md mx-auto text-center animate-fadeIn">
+          <div className="space-y-5 max-w-md mx-auto text-center">
             <div>
-              <h2 className="text-3xl font-black text-[#1e3d2f] dark:text-emerald-500 drop-shadow-sm tracking-wide">סטטיסטיקות</h2>
+              <h2 className="text-3xl font-black text-emerald-500 drop-shadow-sm tracking-wide">סטטיסטיקות</h2>
               <p className="text-lg font-black text-yellow-500 mt-1">סה"כ {stats.totalPoints} נק'</p>
             </div>
 
-            {/* קופסת סטטיסטיקה מעוצבת בדיוק רב לפי תמונת המקור */}
             <div className="bg-white text-gray-900 rounded-2xl p-5 shadow-2xl border border-gray-200 text-right space-y-1">
-              
-              {/* שורה 1: סה"כ ניחוש משחקים */}
               <div className="flex justify-between items-center py-3.5 border-b border-gray-100">
                 <span className="font-black text-xl text-gray-800 pr-2">{stats.totalPredicted}</span>
                 <div className="flex items-center gap-3">
@@ -608,8 +607,6 @@ export default function App() {
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-800"></span>
                 </div>
               </div>
-
-              {/* שורה 2: סה"כ ניחושים מדויקים */}
               <div className="flex justify-between items-center py-3.5 border-b border-gray-100">
                 <span className="font-black text-xl text-green-600 pr-2">{stats.exactMatches}</span>
                 <div className="flex items-center gap-3">
@@ -617,8 +614,6 @@ export default function App() {
                   <span className="w-2.5 h-2.5 rounded-full bg-green-500"></span>
                 </div>
               </div>
-
-              {/* שורה 3: סה"כ ניחושי כיוון */}
               <div className="flex justify-between items-center py-3.5 border-b border-gray-100">
                 <span className="font-black text-xl text-gray-600 pr-2">{stats.directionMatches}</span>
                 <div className="flex items-center gap-3">
@@ -626,8 +621,6 @@ export default function App() {
                   <span className="w-2.5 h-2.5 rounded-full bg-gray-300"></span>
                 </div>
               </div>
-
-              {/* שורה 4: סה"כ פספוסים */}
               <div className="flex justify-between items-center py-3.5 border-b border-gray-100">
                 <span className="font-black text-xl text-red-500 pr-2">{stats.misses}</span>
                 <div className="flex items-center gap-3">
@@ -635,8 +628,6 @@ export default function App() {
                   <span className="w-2.5 h-2.5 rounded-full bg-red-500"></span>
                 </div>
               </div>
-
-              {/* שורה 5: נקודות מלך השערים */}
               <div className="flex justify-between items-center py-3.5 border-b border-gray-100">
                 <span className="font-black text-xl text-amber-500 pr-2">{stats.topScorerTotalPoints}</span>
                 <div className="flex items-center gap-3">
@@ -644,8 +635,6 @@ export default function App() {
                   <span className="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
                 </div>
               </div>
-
-              {/* שורה 6: נקודות מהקבוצה הזוכה */}
               <div className="flex justify-between items-center py-3.5 border-b border-gray-100">
                 <span className="font-black text-xl text-emerald-900 pr-2">{stats.championPoints}</span>
                 <div className="flex items-center gap-3">
@@ -653,8 +642,6 @@ export default function App() {
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-900"></span>
                 </div>
               </div>
-
-              {/* שורה 7: נקודות ממלך הבישולים (התוספת הייחודית שלכם) */}
               <div className="flex justify-between items-center py-3.5">
                 <span className="font-black text-xl text-blue-600 pr-2">{stats.topAssistsPoints}</span>
                 <div className="flex items-center gap-3">
@@ -662,7 +649,6 @@ export default function App() {
                   <span className="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
                 </div>
               </div>
-
             </div>
           </div>
         )}
@@ -703,16 +689,21 @@ export default function App() {
         {currentTab === 'rules' && (
           <div className="space-y-6 text-gray-300 text-sm leading-relaxed">
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 shadow-md">
-              <h2 className="text-yellow-500 font-black text-lg mb-2">📱 על המשחק</h2>
-              <p>בואו לנחש עם כל החבר'ה מהעבודה מי ינצח, מי יהיה הכובש המצטיין ומלך הבישולים.</p>
-            </div>
-            <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 shadow-md space-y-4">
-              <h2 className="text-yellow-500 font-black text-lg border-b border-gray-800 pb-2">🎯 שיטת הניקוד המעודכנת</h2>
+              <h2 className="text-yellow-500 font-black text-lg mb-2 flex items-center gap-2">🎯 שיטת הניקוד המעודכנת</h2>
               <div>
                 <h3 className="text-white font-black text-sm mb-1">⚽ ניקוד משחקים:</h3>
                 <ul className="list-disc list-inside space-y-1 text-gray-400 mr-2">
                   <li>ניחוש כיוון (1,X,2) נכון: מעניק <span className="text-white">2 נקודות</span>.</li>
                   <li>ניחוש תוצאה מדויקת נכון: מוסיף עוד <span className="text-yellow-500 font-bold">4 נק' בונוס</span> (סה"כ 6 נקודות).</li>
+                </ul>
+              </div>
+              <div className="border-t border-gray-800 pt-3 mt-3">
+                <h3 className="text-white font-black text-sm mb-1">🔥 חוקי שחקנים ומענקים מיוחדים:</h3>
+                <ul className="list-disc list-inside space-y-1 text-gray-400 mr-2">
+                  <li><span className="text-yellow-500 font-bold">ריצה במחזורים:</span> בכל פעם ששחקן שנבחר כמלך השערים מבקיע גול במחזור, המשתמש מקבל <span className="text-yellow-500 font-bold">2 נקודות לכל גול</span> באותו רגע!</li>
+                  <li><span className="text-white font-bold">👑 ניחוש מלך השערים הסופי:</span> מעניק <span className="text-white font-bold">40 נקודות</span> בסוף העונה.</li>
+                  <li><span className="text-white font-bold">👑 ניחוש האלופה הסופית:</span> מעניק <span className="text-white font-bold">40 נקודות</span> בסוף העונה.</li>
+                  <li><span className="text-white font-bold">👑 ניחוש מלך הבישולים הסופי:</span> מעניק <span className="text-white font-bold">50 נקודות</span> בסוף העונה.</li>
                 </ul>
               </div>
             </div>
