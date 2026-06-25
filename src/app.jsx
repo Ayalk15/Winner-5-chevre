@@ -242,10 +242,21 @@ export default function App() {
   const [currentTab, setCurrentTab] = useState('predictions');
   const [matchday, setMatchday] = useState(1);
   const [predictions, setPredictions] = useState({});
+  
+  // ניחושי משתמש ארוכי טווח
   const [tournamentPredictions, setTournamentPredictions] = useState({ champion: '', topScorer: '', topAssists: '' });
   
+  // תוצאות אמת (משחקים) של המנהל
   const [actualScores, setActualScores] = useState({});
   const [isAdminMode, setIsAdminMode] = useState(false);
+
+  // ⚙️ תוצאות אמת של הטורניר (סוף העונה) שנשמרות על ידי המנהל
+  const [actualTournament, setActualTournament] = useState({ champion: '', topScorer: '', topAssists: '' });
+
+  // ⚙️ מאגר השערים המחזורי של שחקנים בליגה (מפתח: 'matchday-playerName', ערך: שערים)
+  const [matchdayGoals, setMatchdayGoals] = useState({});
+  const [adminInputPlayer, setAdminInputPlayer] = useState('');
+  const [adminInputGoals, setAdminInputGoals] = useState(0);
 
   const handlePredict = (gameId, value) => {
     setPredictions(prev => {
@@ -295,8 +306,32 @@ export default function App() {
     });
   };
 
+  // הוספת שער לשחקן במחזור הנוכחי על ידי המנהל
+  const addPlayerGoalsByAdmin = () => {
+    if (!adminInputPlayer.trim()) return;
+    const key = `${matchday}-${adminInputPlayer.trim()}`;
+    setMatchdayGoals(prev => ({
+      ...prev,
+      [key]: (prev[key] || 0) + Number(adminInputGoals)
+    }));
+    setAdminInputPlayer('');
+    setAdminInputGoals(0);
+  };
+
+  // מחיקת שחקן מרשימת הכובשים של המחזור
+  const removePlayerGoalsByAdmin = (playerKey) => {
+    setMatchdayGoals(prev => {
+      const updated = { ...prev };
+      delete updated[playerKey];
+      return updated;
+    });
+  };
+
+  // 🧮 מנוע חישוב הניקוד המשוכלל והמתוקן בזמן אמת לכל משתמש
   const calculateLivePoints = () => {
     let score = 0;
+    
+    // 1. ניקוד ממשחקים (2 כיוון, 4 בונוס בול)
     Object.keys(actualScores).forEach(key => {
       const actual = actualScores[key];
       const pred = predictions[key];
@@ -309,13 +344,48 @@ export default function App() {
         }
       }
     });
+
+    // 2. 🔥 חישוב שערים חסר תקדים בזמן אמת: 2 נקודות על כל גול של מלך השערים של המשתמש במחזור
+    if (tournamentPredictions.topScorer.trim()) {
+      Object.keys(matchdayGoals).forEach(key => {
+        const [md, pName] = key.split('-');
+        if (pName.trim() === tournamentPredictions.topScorer.trim()) {
+          score += (matchdayGoals[key] || 0) * 2;
+        }
+      });
+    }
+
+    // 3. 👑 מענקי סוף עונה רשמיים ומעודכנים:
+    if (actualTournament.champion && tournamentPredictions.champion && actualTournament.champion.trim() === tournamentPredictions.champion.trim()) {
+      score += 40; // 40 נקודות על אלופה נכונה
+    }
+    if (actualTournament.topScorer && tournamentPredictions.topScorer && actualTournament.topScorer.trim() === tournamentPredictions.topScorer.trim()) {
+      score += 40; // 40 נקודות על מלך שערים נכון
+    }
+    if (actualTournament.topAssists && tournamentPredictions.topAssists && actualTournament.topAssists.trim() === tournamentPredictions.topAssists.trim()) {
+      score += 50; // 50 נקודות על מלך בישולים נכון
+    }
+
     return score;
   };
 
+  // חישוב בנפרד רק של נקודות שערים לטובת תצוגת הפרופיל
+  const getLiveGoalsPointsOnly = () => {
+    let pts = 0;
+    if (!tournamentPredictions.topScorer.trim()) return 0;
+    Object.keys(matchdayGoals).forEach(key => {
+      const [md, pName] = key.split('-');
+      if (pName.trim() === tournamentPredictions.topScorer.trim()) {
+        pts += (matchdayGoals[key] || 0) * 2;
+      }
+    });
+    return pts;
+  };
+
   const userLivePoints = calculateLivePoints();
+  const goalsPoints = getLiveGoalsPointsOnly();
   const leaderboard = userLivePoints > 0 ? [{ name: 'אייל אשכנזי (אתה)', points: userLivePoints }] : [];
 
-  // פונקציית התחברות עם הסיסמה החדשה: 2531
   const loginAsAdmin = () => {
     if (isAdminMode) {
       setIsAdminMode(false);
@@ -323,7 +393,7 @@ export default function App() {
       const pass = prompt('הכנס סיסמת מנהל מערכת:');
       if (pass === '2531') {
         setIsAdminMode(true);
-        alert('התחברת בהצלחה כמנהל! כעת תוכל לעדכן תוצאות אמת בשונית "משחקים".');
+        alert('התחברת בהצלחה כמנהל! כעת פתוחים בפניך כלי עדכון שערים ותוצאות אמת.');
       } else if (pass !== null) {
         alert('סיסמה שגויה!');
       }
@@ -339,11 +409,12 @@ export default function App() {
         </h1>
         {isAdminMode && (
           <span className="inline-block bg-red-950 text-red-400 border border-red-900 font-bold text-[10px] px-2 py-0.5 rounded-full mt-2 animate-pulse">
-            🛠️ פאנל מנהל פעיל - עדכון תוצאות אמת
+            🛠️ פאנל מנהל פעיל
           </span>
         )}
       </header>
 
+      {/* תפריט לשוניות עליון */}
       <nav className="max-w-md mx-auto mt-4 grid grid-cols-4 gap-1 bg-gray-900 p-1 rounded-xl border border-gray-800">
         <button onClick={() => setCurrentTab('predictions')} className={`py-2 text-[11px] font-black rounded-lg transition-all ${currentTab === 'predictions' ? 'bg-yellow-500 text-gray-950 shadow-md' : 'text-gray-400'}`}>⚽ משחקים</button>
         <button onClick={() => setCurrentTab('tournament')} className={`py-2 text-[11px] font-black rounded-lg transition-all ${currentTab === 'tournament' ? 'bg-yellow-500 text-gray-950 shadow-md' : 'text-gray-400'}`}>👑 הטורניר שלי</button>
@@ -353,6 +424,7 @@ export default function App() {
 
       <main className="max-w-md mx-auto mt-6">
         
+        {/* לשונית 1: משחקים וניהול כובשים מחזורי */}
         {currentTab === 'predictions' && (
           <div className="space-y-6">
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 shadow-xl">
@@ -362,204 +434,26 @@ export default function App() {
               </select>
             </div>
 
-            <section className="space-y-4">
-              {allFixtures[matchday]?.map((game) => {
-                const gameKey = `${matchday}-${game.id}`;
-                const gamePrediction = predictions[gameKey] || { winner: '', homeScore: 0, awayScore: 0 };
-                const actual = actualScores[gameKey] || { homeScore: 0, awayScore: 0, winner: 'X', isFinished: false };
-                
-                let pointsEarned = null;
-                if (actual.isFinished && gamePrediction.winner) {
-                  pointsEarned = 0;
-                  if (gamePrediction.winner === actual.winner) {
-                    pointsEarned = (Number(gamePrediction.homeScore) === Number(actual.homeScore) && Number(gamePrediction.awayScore) === Number(actual.awayScore)) ? 6 : 2;
-                  }
-                }
-
-                return (
-                  <div key={game.id} className="bg-gray-900 border border-gray-800 rounded-xl p-4 shadow-md space-y-3">
-                    <div className="flex justify-between items-center text-xs text-gray-500 font-semibold">
-                      <span>ליגת העל • {game.time}</span>
-                      {actual.isFinished && (
-                        <span className="bg-red-950 text-red-400 border border-red-900 text-[10px] px-2 py-0.5 rounded-md font-bold">🛑 הסתיים</span>
-                      )}
+            {/* 🔧 פאנל ניהול כובשים מחזורי למנהל המערכת */}
+            {isAdminMode && (
+              <div className="bg-red-950/20 border border-red-900/40 p-4 rounded-xl space-y-3">
+                <h3 className="text-xs font-black text-red-400">⚙️ עדכון שערים בזמן אמת למחזור {matchday}:</h3>
+                <div className="flex gap-2">
+                  <input type="text" value={adminInputPlayer} onChange={(e) => setAdminInputPlayer(e.target.value)} placeholder="שם השחקן שהבקיע..." className="flex-1 bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs font-bold text-white focus:outline-none"/>
+                  <input type="number" value={adminInputGoals} onChange={(e) => setAdminInputGoals(Number(e.target.value))} className="w-16 bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs font-black text-yellow-500 text-center focus:outline-none"/>
+                  <button onClick={addPlayerGoalsByAdmin} className="bg-yellow-500 text-gray-950 text-xs font-black px-3 rounded-lg hover:bg-yellow-400">הוסף</button>
+                </div>
+                {/* רשימת הכובשים שהוזנו במחזור הנוכחי */}
+                <div className="space-y-1.5 pt-2">
+                  {Object.keys(matchdayGoals).filter(k => k.startsWith(`${matchday}-`)).map(k => (
+                    <div key={k} className="flex justify-between items-center bg-gray-950 p-2 rounded-lg border border-gray-800 text-xs">
+                      <span className="font-bold text-gray-300">⚽ {k.split('-')[1]}: <span className="text-yellow-500 font-black">{matchdayGoals[k]} שערים</span></span>
+                      <button onClick={() => removePlayerGoalsByAdmin(k)} className="text-red-500 font-bold hover:text-red-400 px-1">✕</button>
                     </div>
-                    
-                    <div className="flex justify-between items-center py-1">
-                      <span className="font-bold text-base text-gray-100 w-5/12 text-right break-words">{game.home}</span>
-                      <span className="text-gray-600 text-xs font-black px-2">VS</span>
-                      <span className="font-bold text-base text-gray-100 w-5/12 text-left break-words">{game.away}</span>
-                    </div>
-
-                    {actual.isFinished && (
-                      <div className="bg-gray-950 p-2.5 rounded-xl border border-dashed border-gray-800 text-center flex justify-between items-center px-4">
-                        <span className="text-xs font-bold text-gray-400">תוצאת אמת סופית:</span>
-                        <span className="font-black text-sm text-yellow-500">{actual.homeScore} - {actual.awayScore}</span>
-                        <span className={`text-xs font-black px-2 py-0.5 rounded ${pointsEarned === 6 ? 'bg-green-950 text-green-400' : pointsEarned === 2 ? 'bg-blue-950 text-blue-400' : 'bg-gray-800 text-gray-400'}`}>
-                          {pointsEarned === 6 ? '🎯 בול (+6 נק\')' : pointsEarned === 2 ? '👍 כיוון (+2 נק\')' : '0 נקודות'}
-                        </span>
-                      </div>
-                    )}
-
-                    {!actual.isFinished && (
-                      <div className="flex justify-between items-center bg-gray-950 p-3 rounded-xl border border-gray-800/80 mt-1">
-                        <span className="text-xs font-bold text-gray-400">הניחוש שלך:</span>
-                        <div className="flex items-center gap-3" style={{ direction: 'ltr' }}>
-                          <div className="flex items-center bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
-                            <button type="button" onClick={() => handleScoreChange(game.id, 'away', -1)} className="px-2.5 py-1 text-gray-400 font-black text-sm">-</button>
-                            <span className="px-3 py-1 font-black text-yellow-500 min-w-[28px] text-center bg-gray-900 text-base border-x border-gray-700">{gamePrediction.awayScore}</span>
-                            <button type="button" onClick={() => handleScoreChange(game.id, 'away', 1)} className="px-2.5 py-1 text-gray-400 font-black text-sm">+</button>
-                          </div>
-                          <span className="text-gray-600 font-black text-sm">:</span>
-                          <div className="flex items-center bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
-                            <button type="button" onClick={() => handleScoreChange(game.id, 'home', -1)} className="px-2.5 py-1 text-gray-400 font-black text-sm">-</button>
-                            <span className="px-3 py-1 font-black text-yellow-500 min-w-[28px] text-center bg-gray-900 text-base border-x border-gray-700">{gamePrediction.homeScore}</span>
-                            <button type="button" onClick={() => handleScoreChange(game.id, 'home', 1)} className="px-2.5 py-1 text-gray-400 font-black text-sm">+</button>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="grid grid-cols-3 gap-2 pt-1">
-                      {['1', 'X', '2'].map((option) => (
-                        <button
-                          key={option}
-                          disabled={actual.isFinished}
-                          onClick={() => handlePredict(game.id, option)}
-                          className={`py-2 text-xs font-black rounded-lg border transition-all ${gamePrediction.winner === option ? 'bg-yellow-500 border-yellow-500 text-gray-950 scale-105 shadow-md' : 'bg-gray-800 border-gray-700 text-gray-300'}`}
-                        >
-                          {option === '1' ? '1 (בית)' : option === 'X' ? 'X (תיקו)' : '2 (חוץ)'}
-                        </button>
-                      ))}
-                    </div>
-
-                    {isAdminMode && (
-                      <div className="mt-3 pt-3 border-t border-red-900/40 bg-red-950/20 p-3 rounded-xl border border-red-900/30 space-y-3">
-                        <div className="flex justify-between items-center">
-                          <span className="text-xs font-black text-red-400">⚙️ עדכון תוצאת אמת (מנהל):</span>
-                          <button onClick={() => toggleGameFinished(game.id)} className={`px-3 py-1 text-[11px] font-black rounded-md border transition-all ${actual.isFinished ? 'bg-green-950 border-green-800 text-green-400' : 'bg-red-900 border-red-700 text-white'}`}>
-                            {actual.isFinished ? '🔓 פתח משחק' : '🔒 סיום ונעילת משחק'}
-                          </button>
-                        </div>
-                        <div className="flex justify-center items-center gap-4" style={{ direction: 'ltr' }}>
-                          <div className="flex items-center bg-gray-800 rounded-lg border border-red-900/50 overflow-hidden">
-                            <button type="button" onClick={() => handleAdminScoreChange(game.id, 'away', -1)} className="px-3 py-1 text-red-400 font-bold bg-gray-800 hover:bg-gray-700">-</button>
-                            <span className="px-4 py-1 font-black text-white min-w-[32px] text-center bg-gray-900">{actual.awayScore}</span>
-                            <button type="button" onClick={() => handleAdminScoreChange(game.id, 'away', 1)} className="px-3 py-1 text-red-400 font-bold bg-gray-800 hover:bg-gray-700">+</button>
-                          </div>
-                          <span className="text-red-400 font-black text-lg">:</span>
-                          <div className="flex items-center bg-gray-800 rounded-lg border border-red-900/50 overflow-hidden">
-                            <button type="button" onClick={() => handleAdminScoreChange(game.id, 'home', -1)} className="px-3 py-1 text-red-400 font-bold bg-gray-800 hover:bg-gray-700">-</button>
-                            <span className="px-4 py-1 font-black text-white min-w-[32px] text-center bg-gray-900">{actual.homeScore}</span>
-                            <button type="button" onClick={() => handleAdminScoreChange(game.id, 'home', 1)} className="px-3 py-1 text-red-400 font-bold bg-gray-800 hover:bg-gray-700">+</button>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                  </div>
-                );
-              })}
-            </section>
-          </div>
-        )}
-
-        {currentTab === 'tournament' && (
-          <div className="space-y-6">
-            <div className="bg-[#1e3d2f] border border-[#2a5441] rounded-2xl overflow-hidden shadow-2xl">
-              <div className="p-6 text-center border-b border-[#2a5441]/60 flex flex-col items-center">
-                <div className="w-24 h-24 bg-yellow-500 rounded-full flex flex-col items-center justify-center border-4 border-[#12261d] relative shadow-inner">
-                  <span className="text-gray-950 font-black text-[13px] leading-tight text-center">10 חבר'ה</span>
-                  <span className="text-gray-950 text-[8px] tracking-wider font-bold -mt-0.5">יוספטל</span>
-                  <div className="absolute bottom-1 bg-gray-900/80 p-1 rounded-full text-yellow-500 text-[10px]">📷</div>
+                  ))}
                 </div>
-                <h2 className="text-xl font-black text-white mt-3">📝 הניחושים המיוחדים שלי</h2>
-              </div>
-              <div className="bg-gray-900 p-5 space-y-5">
-                <div className="bg-gray-950 p-4 rounded-xl border border-gray-800 shadow-md">
-                  <label className="block text-sm font-black text-gray-300 mb-2">🏆 האלופה שלי:</label>
-                  <input type="text" value={tournamentPredictions.champion} onChange={(e) => setTournamentPredictions({...tournamentPredictions, champion: e.target.value})} placeholder="הקלד את שם האלופה המשוערת..." className="w-full bg-gray-800 p-3 rounded-lg text-white font-bold border border-gray-700 focus:outline-none focus:border-yellow-500 text-sm"/>
-                  <div className="text-left text-xs text-yellow-500 font-bold mt-1.5">מענק זכייה: 30 נקודות</div>
-                </div>
-                <div className="bg-gray-950 p-4 rounded-xl border border-gray-800 shadow-md">
-                  <label className="block text-sm font-black text-gray-300 mb-2">👟 מלך השערים שלי:</label>
-                  <input type="text" value={tournamentPredictions.topScorer} onChange={(e) => setTournamentPredictions({...tournamentPredictions, topScorer: e.target.value})} placeholder="הקלד את מלך השערים שלך..." className="w-full bg-gray-800 p-3 rounded-lg text-white font-bold border border-gray-700 focus:outline-none focus:border-yellow-500 text-sm"/>
-                  <div className="text-left text-xs text-yellow-500 font-bold mt-1.5">מענק מלך השערים: 20 נקודות</div>
-                </div>
-                <div className="bg-gray-950 p-4 rounded-xl border border-gray-800 shadow-md">
-                  <label className="block text-sm font-black text-gray-300 mb-2">🎯 מלך הבישולים שלי:</label>
-                  <input type="text" value={tournamentPredictions.topAssists} onChange={(e) => setTournamentPredictions({...tournamentPredictions, topAssists: e.target.value})} placeholder="הקלד את מלך הבישולים שלך..." className="w-full bg-gray-800 p-3 rounded-lg text-white font-bold border border-gray-700 focus:outline-none focus:border-yellow-500 text-sm"/>
-                  <div className="text-left text-xs text-gray-400 font-bold mt-1.5">יעניק בונוס בסיום העונה</div>
-                </div>
-              </div>
-              <div className="bg-gray-950 p-4 text-center border-t border-gray-800">
-                <button onClick={() => alert('הניחושים הארוכים עודכנו בהצלחה!')} className="w-full bg-[#1e3d2f] text-white font-black py-3 rounded-xl shadow-lg border border-[#2a5441]">שמור שינויים</button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {currentTab === 'leaderboard' && (
-          <section className="bg-gray-900 border border-gray-800 rounded-xl p-4 shadow-xl">
-            <h2 className="text-lg font-bold text-gray-200 mb-3">📊 מצב הטבלה הכללית</h2>
-            {leaderboard.length === 0 ? (
-              <div className="p-8 text-center text-gray-500 text-sm bg-gray-950 rounded-lg border border-gray-800/60 font-medium">
-                🚶‍♂️ אין עדיין מנחשים רשומים בטבלה. <br />
-                <span className="text-xs text-gray-600 mt-1 block">ברגע שתנחש ותסיים משחק במצב מנהל, השם והניקוד שלך יקפצו לכאן אוטומטית!</span>
-              </div>
-            ) : (
-              <div className="overflow-hidden rounded-lg border border-gray-800">
-                <table className="w-full text-right border-collapse">
-                  <thead>
-                    <tr className="bg-gray-800 text-gray-400 text-xs">
-                      <th className="p-3">שם המנחש</th>
-                      <th className="p-3 text-center">נקודות</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-800">
-                    {leaderboard.map((user, idx) => (
-                      <tr key={idx} className="hover:bg-gray-800/50 bg-gray-900">
-                        <td className="p-3 font-medium text-gray-100">👑 {user.name}</td>
-                        <td className="p-3 text-center font-bold text-yellow-500 bg-gray-950/40">{user.points}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
               </div>
             )}
-          </section>
-        )}
 
-        {currentTab === 'rules' && (
-          <div className="space-y-6 text-gray-300 text-sm leading-relaxed">
-            <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 shadow-md">
-              <h2 className="text-yellow-500 font-black text-lg mb-2">📱 על המשחק</h2>
-              <p>בואו לנחש עם כל החבר'ה מהעבודה מי ינצח, מי יהיה הכובש המצטיין ומלך הבישולים.</p>
-            </div>
-            <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 shadow-md space-y-4">
-              <h2 className="text-yellow-500 font-black text-lg border-b border-gray-800 pb-2">🎯 שיטת הניקוד</h2>
-              <div>
-                <h3 className="text-white font-black text-sm mb-1">⚽ ניקוד משחקים:</h3>
-                <ul className="list-disc list-inside space-y-1 text-gray-400 mr-2">
-                  <li> ניחוש כיוון (1,X,2) נכון: מעניק <span className="text-white font-bold">2 נקודות</span>.</li>
-                  <li> ניחוש תוצאה מדויקת נכון: מוסיף עוד <span className="text-yellow-500 font-bold">4 נק\' בונוס</span> (סה"כ 6 נקודות למשחק!).</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        )}
-
-      </main>
-
-      <footer className="max-w-md mx-auto mt-12 text-center">
-        <button 
-          onClick={loginAsAdmin}
-          className={`px-4 py-2 text-xs font-bold rounded-lg border transition-all ${isAdminMode ? 'bg-red-950 border-red-800 text-red-400' : 'bg-gray-900 border-gray-800 text-gray-500 hover:text-white'}`}
-        >
-          {isAdminMode ? '🔒 צא ממצב מנהל' : '🔧 ניהול מערכת (הזנת תוצאות אמת)'}
-        </button>
-      </footer>
-
-    </div>
-  );
-}
+            <section className="space-y-4">
+              {allFi
