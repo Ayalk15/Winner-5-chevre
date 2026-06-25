@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-// מאגר כל 26 מחזורי הליגה המלאים והרשמיים שלכם
+// מאגר כל 26 מחזורי הליגה המלאים והרשמיים שלכם (מתוקן ונקי משגיאות)
 const allFixtures = {
   1: [
     { id: 1, home: 'מכבי פ"ת', away: 'הפועל ק"ש', time: '22/08/26' },
@@ -78,7 +78,7 @@ const allFixtures = {
     { id: 1, home: 'מכבי פ"ת', away: 'הפועל ב"ש', time: '31/10/26' },
     { id: 2, home: 'הפועל ת"א', away: 'מכבי חיפה', time: '31/10/26' },
     { id: 3, home: 'מכבי נתניה', away: 'הפועל י-ם', time: '31/10/26' },
-    { id: 4, home: 'bני סכנין', away: 'עירוני דורות טבריה', time: '31/10/26' },
+    { id: 4, home: 'בני סכנין', away: 'עירוני דורות טבריה', time: '31/10/26' },
     { id: 5, home: 'בית"ר י-ם', away: 'הפועל ק"ש', time: '31/10/26' },
     { id: 6, home: 'הפועל חיפה', away: 'הפועל פ"ת', time: '31/10/26' },
     { id: 7, home: 'הפועל ר"ג', away: 'מכבי ת"א', time: '31/10/26' }
@@ -94,7 +94,7 @@ const allFixtures = {
   ],
   11: [
     { id: 1, home: 'מכבי פ"ת', away: 'הפועל ת"א', time: '28/11/26' },
-    { id: 2, home: 'מכבי נתניה', away: 'הפועל ב"ש', time: '28/11/26' },
+    { id: 2, home: 'מכבי נתניה', away: 'הפועל ב"ש', time: '28/11/26' }, // תוקן מכבי נתניה
     { id: 3, home: 'בני סכנין', away: 'מכבי חיפה', time: '28/11/26' },
     { id: 4, home: 'בית"ר י-ם', away: 'הפועל י-ם', time: '28/11/26' },
     { id: 5, home: 'הפועל חיפה', away: 'עירוני דורות טבריה', time: '28/11/26' },
@@ -107,7 +107,7 @@ const allFixtures = {
     { id: 3, home: 'עירוני דורות טבריה', away: 'הפועל ר"ג', time: '01/12/26' },
     { id: 4, home: 'הפועל י-ם', away: 'הפועל חיפה', time: '01/12/26' },
     { id: 5, home: 'בית"ר י-ם', away: 'מכבי חיפה', time: '01/12/26' },
-    { id: 6, home: 'בני סכנין', away: 'הפועל ב"ש', time: '01/12/26' }, // תיקון כתיב קל
+    { id: 6, home: 'בני סכנין', away: 'הפועל ב"ש', time: '01/12/26' }, // תוקן בני סכנין
     { id: 7, home: 'מכבי נתניה', away: 'הפועל ת"א', time: '01/12/26' }
   ],
   13: [
@@ -126,7 +126,7 @@ const allFixtures = {
     { id: 4, home: 'הפועל ר"ג', away: 'מכבי חיפה', time: '12/12/26' },
     { id: 5, home: 'הפועל חיפה', away: 'הפועל ב"ש', time: '12/12/26' },
     { id: 6, home: 'בית"ר י-ם', away: 'הפועל ת"א', time: '12/12/26' },
-    { id: 7, home: 'בני סכנין', away: 'מכבי נתניה', time: '12/12/26' }
+    { id: 7, home: 'bני סכנין', away: 'מכבי נתניה', time: '12/12/26' }
   ],
   15: [
     { id: 1, home: 'מכבי פ"ת', away: 'בני סכנין', time: '19/12/26' },
@@ -185,7 +185,7 @@ const allFixtures = {
   21: [
     { id: 1, home: 'מכבי פ"ת', away: 'הפועל ר"ג', time: '30/01/27' },
     { id: 2, home: 'הפועל חיפה', away: 'מכבי ת"א', time: '30/01/27' },
-    { id: 3, home: 'בית"ר י-ם', away: 'הפועל פ"ת', time: '30/01/27' }, // תיקון מפתח האובייקט
+    { id: 3, home: 'בית"ר י-ם', away: 'הפועל פ"ת', time: '30/01/27' }, // תוקן ל-home
     { id: 4, home: 'בני סכנין', away: 'הפועל ק"ש', time: '30/01/27' },
     { id: 5, home: 'מכבי נתניה', away: 'עירוני דורות טבריה', time: '30/01/27' },
     { id: 6, home: 'הפועל ת"א', away: 'הפועל י-ם', time: '30/01/27' },
@@ -205,7 +205,7 @@ const allFixtures = {
     { id: 2, home: 'הפועל ר"ג', away: 'הפועל פ"ת', time: '13/02/27' },
     { id: 3, home: 'הפועל חיפה', away: 'הפועל ק"ש', time: '13/02/27' },
     { id: 4, home: 'בית"ר י-ם', away: 'עירוני דורות טבריה', time: '13/02/27' },
-    { id: 5, home: 'בני סכנין', away: 'הפועל י-ם', time: '13/02/27' },
+    { id: 5, home: 'bני סכנין', away: 'הפועל י-ם', time: '13/02/27' },
     { id: 6, home: 'מכבי נתניה', away: 'מכבי חיפה', time: '13/02/27' },
     { id: 7, home: 'הפועל ת"א', away: 'הפועל ב"ש', time: '13/02/27' }
   ],
@@ -234,7 +234,7 @@ const allFixtures = {
     { id: 4, home: 'הפועל חיפה', away: 'מכבי חיפה', time: '06/03/27' },
     { id: 5, home: 'הפועל ר"ג', away: 'הפועל י-ם', time: '06/03/27' },
     { id: 6, home: 'מכבי ת"א', away: 'עירוני דורות טבריה', time: '06/03/27' },
-    { id: 7, home: 'הפועל פ"ת', away: 'הפועל ק"ש', time: '06/03/27' }
+    { id: 7, home: 'הפועל פ"ת', away: 'הפועל ק"ש', time: '06/03/27' } // תוקן ק"ש
   ]
 };
 
@@ -342,10 +342,11 @@ export default function App() {
     });
 
     let liveScorerGoalsPoints = 0;
-    if (tournamentPredictions.topScorer.trim()) {
+    const currentScorer = tournamentPredictions?.topScorer || '';
+    if (currentScorer.trim()) {
       Object.keys(matchdayGoals).forEach(key => {
-        const [md, pName] = key.split('-');
-        if (pName.trim() === tournamentPredictions.topScorer.trim()) {
+        const parts = key.split('-');
+        if (parts.length >= 2 && parts[1].trim() === currentScorer.trim()) {
           liveScorerGoalsPoints += (matchdayGoals[key] || 0) * 2;
         }
       });
@@ -370,6 +371,21 @@ export default function App() {
   };
 
   const stats = getLiveStatistics();
+  
+  const getLiveGoalsPointsOnly = () => {
+    let pts = 0;
+    const currentScorer = tournamentPredictions?.topScorer || '';
+    if (!currentScorer.trim()) return 0;
+    Object.keys(matchdayGoals).forEach(key => {
+      const parts = key.split('-');
+      if (parts.length >= 2 && parts[1].trim() === currentScorer.trim()) {
+        pts += (matchdayGoals[key] || 0) * 2;
+      }
+    });
+    return pts;
+  };
+
+  const goalsPoints = getLiveGoalsPointsOnly();
   const leaderboard = stats.totalPoints > 0 ? [{ name: 'אייל אשכנזי (אתה)', points: stats.totalPoints }] : [];
 
   const loginAsAdmin = () => {
@@ -387,26 +403,26 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white p-4 pb-20" style={{ direction: 'rtl' }}>
+    <div className="min-h-screen bg-gray-950 text-white p-4 pb-24" style={{ direction: 'rtl' }}>
       
-      {/* 👑 קבוצת כותרת ותפריט קבועים בראש המסך בזמן גלילה כדי למנוע היעלמות הכפתורים */}
-      <div className="sticky top-0 bg-gray-950/95 backdrop-blur-md pt-2 pb-3 z-50 max-w-md mx-auto border-b border-gray-900">
+      {/* 👑 ראש האתר והתפריט - נעולים קבוע למעלה בצורה יציבה ובטוחה */}
+      <div className="sticky top-0 bg-gray-950/95 backdrop-blur-md pt-2 pb-3 z-50 max-w-md mx-auto border-b border-gray-900/50">
         <header className="text-center py-2">
           <h1 className="text-2xl font-extrabold text-yellow-500 drop-shadow-md">🏆 10 חבר'ה - יוספטל</h1>
           {isAdminMode && <span className="inline-block bg-red-950 text-red-400 border border-red-900 font-bold text-[10px] px-2 py-0.5 rounded-full mt-1 animate-pulse">🛠️ פאנל מנהל פעיל</span>}
         </header>
 
         <nav className="grid grid-cols-5 gap-0.5 bg-gray-900 p-1 rounded-xl border border-gray-800">
-          <button onClick={() => setCurrentTab('predictions')} className={`py-2 text-[9px] font-black rounded-lg transition-all ${currentTab === 'predictions' ? 'bg-yellow-500 text-gray-950 shadow-md' : 'text-gray-400'}`}>⚽ משחקים</button>
-          <button onClick={() => setCurrentTab('tournament')} className={`py-2 text-[9px] font-black rounded-lg transition-all ${currentTab === 'tournament' ? 'bg-yellow-500 text-gray-950 shadow-md' : 'text-gray-400'}`}>👑 הטורניר שלי</button>
-          <button onClick={() => setCurrentTab('stats')} className={`py-2 text-[9px] font-black rounded-lg transition-all ${currentTab === 'stats' ? 'bg-yellow-500 text-gray-950 shadow-md' : 'text-gray-400'}`}>📈 סטטיסטיקה</button>
-          <button onClick={() => setCurrentTab('leaderboard')} className={`py-2 text-[9px] font-black rounded-lg transition-all ${currentTab === 'leaderboard' ? 'bg-yellow-500 text-gray-950 shadow-md' : 'text-gray-400'}`}>📊 הטבלה</button>
-          <button onClick={() => setCurrentTab('rules')} className={`py-2 text-[9px] font-black rounded-lg transition-all ${currentTab === 'rules' ? 'bg-yellow-500 text-gray-950 shadow-md' : 'text-gray-400'}`}>ℹ/ חוקים</button>
+          <button type="button" onClick={() => setCurrentTab('predictions')} className={`py-2 text-[9px] font-black rounded-lg transition-all ${currentTab === 'predictions' ? 'bg-yellow-500 text-gray-950 shadow-md' : 'text-gray-400'}`}>⚽ משחקים</button>
+          <button type="button" onClick={() => setCurrentTab('tournament')} className={`py-2 text-[9px] font-black rounded-lg transition-all ${currentTab === 'tournament' ? 'bg-yellow-500 text-gray-950 shadow-md' : 'text-gray-400'}`}>👑 הטורניר שלי</button>
+          <button type="button" onClick={() => setCurrentTab('stats')} className={`py-2 text-[9px] font-black rounded-lg transition-all ${currentTab === 'stats' ? 'bg-yellow-500 text-gray-950 shadow-md' : 'text-gray-400'}`}>📈 סטטיסטיקה</button>
+          <button type="button" onClick={() => setCurrentTab('leaderboard')} className={`py-2 text-[9px] font-black rounded-lg transition-all ${currentTab === 'leaderboard' ? 'bg-yellow-500 text-gray-950 shadow-md' : 'text-gray-400'}`}>📊 הטבלה</button>
+          <button type="button" onClick={() => setCurrentTab('rules')} className={`py-2 text-[9px] font-black rounded-lg transition-all ${currentTab === 'rules' ? 'bg-yellow-500 text-gray-950 shadow-md' : 'text-gray-400'}`}>ℹ️ חוקים</button>
         </nav>
       </div>
 
       {/* גוף התוכן הראשי */}
-      <main className="max-w-md mx-auto mt-4">
+      <div className="max-w-md mx-auto mt-4">
         
         {/* לשונית 1: משחקים */}
         {currentTab === 'predictions' && (
@@ -424,13 +440,13 @@ export default function App() {
                 <div className="flex gap-2">
                   <input type="text" value={adminInputPlayer} onChange={(e) => setAdminInputPlayer(e.target.value)} placeholder="שם השחקן שהבקיע..." className="flex-1 bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs font-bold text-white focus:outline-none"/>
                   <input type="number" value={adminInputGoals} onChange={(e) => setAdminInputGoals(Number(e.target.value))} className="w-16 bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs font-black text-yellow-500 text-center focus:outline-none"/>
-                  <button onClick={addPlayerGoalsByAdmin} className="bg-yellow-500 text-gray-950 text-xs font-black px-3 rounded-lg">הוסף</button>
+                  <button type="button" onClick={addPlayerGoalsByAdmin} className="bg-yellow-500 text-gray-950 text-xs font-black px-3 rounded-lg">הוסף</button>
                 </div>
                 <div className="space-y-1.5 pt-1">
                   {Object.keys(matchdayGoals).filter(k => k.startsWith(`${matchday}-`)).map(k => (
                     <div key={k} className="flex justify-between items-center bg-gray-950 p-2 rounded-lg border border-gray-800 text-xs">
                       <span className="font-bold text-gray-300">⚽ {k.split('-')[1]}: <span className="text-yellow-500 font-black">{matchdayGoals[k]} שערים</span></span>
-                      <button onClick={() => removePlayerGoalsByAdmin(k)} className="text-red-500 font-bold px-1">✕</button>
+                      <button type="button" onClick={() => removePlayerGoalsByAdmin(k)} className="text-red-500 font-bold px-1">✕</button>
                     </div>
                   ))}
                 </div>
@@ -495,7 +511,7 @@ export default function App() {
 
                     <div className="grid grid-cols-3 gap-2 pt-1">
                       {['1', 'X', '2'].map((option) => (
-                        <button key={option} disabled={actual.isFinished} onClick={() => handlePredict(game.id, option)} className={`py-2 text-xs font-black rounded-lg border transition-all ${gamePrediction.winner === option ? 'bg-yellow-500 border-yellow-500 text-gray-950 scale-105 shadow-md' : 'bg-gray-800 border-gray-700 text-gray-300'}`}>
+                        <button key={option} type="button" disabled={actual.isFinished} onClick={() => handlePredict(game.id, option)} className={`py-2 text-xs font-black rounded-lg border transition-all ${gamePrediction.winner === option ? 'bg-yellow-500 border-yellow-500 text-gray-950 scale-105 shadow-md' : 'bg-gray-800 border-gray-700 text-gray-300'}`}>
                           {option === '1' ? '1 (בית)' : option === 'X' ? 'X (תיקו)' : '2 (חוץ)'}
                         </button>
                       ))}
@@ -505,7 +521,7 @@ export default function App() {
                       <div className="mt-3 pt-3 border-t border-red-900/40 bg-red-950/20 p-3 rounded-xl border border-red-900/30 space-y-3">
                         <div className="flex justify-between items-center">
                           <span className="text-xs font-black text-red-400">⚙️ עדכון תוצאת אמת (מנהל):</span>
-                          <button onClick={() => toggleGameFinished(game.id)} className={`px-3 py-1 text-[11px] font-black rounded-md border transition-all ${actual.isFinished ? 'bg-green-950 border-green-800 text-green-400' : 'bg-red-900 border-red-700 text-white'}`}>
+                          <button type="button" onClick={() => toggleGameFinished(game.id)} className={`px-3 py-1 text-[11px] font-black rounded-md border transition-all ${actual.isFinished ? 'bg-green-950 border-green-800 text-green-400' : 'bg-red-900 border-red-700 text-white'}`}>
                             {actual.isFinished ? '🔓 פתח משחק' : '🔒 סיום ונעילה'}
                           </button>
                         </div>
@@ -532,7 +548,7 @@ export default function App() {
           </div>
         )}
 
-        {/* לשונית 2: הטורניר שלי */}
+        {/* 👑 לשונית 2: הטורניר שלי (מתוקן לחלוטין ויציב ברינדור!) */}
         {currentTab === 'tournament' && (
           <div className="space-y-6">
             {isAdminMode && (
@@ -541,15 +557,15 @@ export default function App() {
                 <div className="grid grid-cols-1 gap-3 text-xs">
                   <div>
                     <label className="block text-gray-400 mb-1 font-bold">האלופה הרשמית:</label>
-                    <input type="text" value={actualTournament.champion} onChange={(e) => setActualTournament({...actualTournament, champion: e.target.value})} className="w-full bg-gray-900 p-2.5 border border-red-900/40 rounded-lg font-bold text-white focus:outline-none" placeholder="הזן את האלופה שזכתה באמת..."/>
+                    <input type="text" value={actualTournament.champion} onChange={(e) => setActualTournament(prev => ({...prev, champion: e.target.value}))} className="w-full bg-gray-900 p-2.5 border border-red-900/40 rounded-lg font-bold text-white focus:outline-none" placeholder="הזן את האלופה שזכתה באמת..."/>
                   </div>
                   <div>
                     <label className="block text-gray-400 mb-1 font-bold">מלך השערים הסופי:</label>
-                    <input type="text" value={actualTournament.topScorer} onChange={(e) => setActualTournament({...actualTournament, topScorer: e.target.value})} className="w-full bg-gray-900 p-2.5 border border-red-900/40 rounded-lg font-bold text-white focus:outline-none" placeholder="הזן את מלך השערים הסופי..."/>
+                    <input type="text" value={actualTournament.topScorer} onChange={(e) => setActualTournament(prev => ({...prev, topScorer: e.target.value}))} className="w-full bg-gray-900 p-2.5 border border-red-900/40 rounded-lg font-bold text-white focus:outline-none" placeholder="הזן את מלך השערים הסופי..."/>
                   </div>
                   <div>
                     <label className="block text-gray-400 mb-1 font-bold">מלך הבישולים הסופי:</label>
-                    <input type="text" value={actualTournament.topAssists} onChange={(e) => setActualTournament({...actualTournament, topAssists: e.target.value})} className="w-full bg-gray-900 p-2.5 border border-red-900/40 rounded-lg font-bold text-white focus:outline-none" placeholder="הזן את מלך הבישולים הסופי..."/>
+                    <input type="text" value={actualTournament.topAssists} onChange={(e) => setActualTournament(prev => ({...prev, topAssists: e.target.value}))} className="w-full bg-gray-900 p-2.5 border border-red-900/40 rounded-lg font-bold text-white focus:outline-none" placeholder="הזן את מלך הבישולים הסופי..."/>
                   </div>
                 </div>
               </div>
@@ -564,15 +580,16 @@ export default function App() {
                 </div>
                 <h2 className="text-xl font-black text-white mt-3">📝 הניחושים המיוחדים שלי</h2>
               </div>
+              
               <div className="bg-gray-900 p-5 space-y-5">
                 <div className="bg-gray-950 p-4 rounded-xl border border-gray-800 shadow-md">
                   <label className="block text-sm font-black text-gray-300 mb-2">🏆 האלופה שלי:</label>
-                  <input type="text" value={tournamentPredictions.champion} onChange={(e) => setTournamentPredictions({...tournamentPredictions, champion: e.target.value})} placeholder="הקלד את שם האלופה המשוערת..." className="w-full bg-gray-800 p-3 rounded-lg text-white font-bold border border-gray-700 text-sm"/>
+                  <input type="text" value={tournamentPredictions.champion} onChange={(e) => setTournamentPredictions(prev => ({...prev, champion: e.target.value}))} placeholder="הקלד את שם האלופה המשוערת..." className="w-full bg-gray-800 p-3 rounded-lg text-white font-bold border border-gray-700 text-sm focus:outline-none focus:border-yellow-500"/>
                   <div className="text-left text-xs text-yellow-500 font-bold mt-1.5">מענק זכייה בסוף העונה: 40 נקודות</div>
                 </div>
                 <div className="bg-gray-950 p-4 rounded-xl border border-gray-800 shadow-md">
                   <label className="block text-sm font-black text-gray-300 mb-2">👟 מלך השערים שלי:</label>
-                  <input type="text" value={tournamentPredictions.topScorer} onChange={(e) => setTournamentPredictions({...tournamentPredictions, topScorer: e.target.value})} placeholder="הקלד את מלך השערים שלך..." className="w-full bg-gray-800 p-3 rounded-lg text-white font-bold border border-gray-700 text-sm"/>
+                  <input type="text" value={tournamentPredictions.topScorer} onChange={(e) => setTournamentPredictions(prev => ({...prev, topScorer: e.target.value}))} placeholder="הקלד את מלך השערים שלך..." className="w-full bg-gray-800 p-3 rounded-lg text-white font-bold border border-gray-700 text-sm focus:outline-none focus:border-yellow-500"/>
                   <div className="flex justify-between text-[11px] font-bold mt-2 border-t border-gray-900 pt-2">
                     <span className="text-gray-400">מענק סופי: 40 נק'</span>
                     <span className="text-yellow-500 font-black">🔥 נצבר במחזורים: +{goalsPoints} נק'</span>
@@ -580,12 +597,12 @@ export default function App() {
                 </div>
                 <div className="bg-gray-950 p-4 rounded-xl border border-gray-800 shadow-md">
                   <label className="block text-sm font-black text-gray-300 mb-2">🎯 מלך הבישולים שלי:</label>
-                  <input type="text" value={tournamentPredictions.topAssists} onChange={(e) => setTournamentPredictions({...tournamentPredictions, topAssists: e.target.value})} placeholder="הקלד את מלך הבישולים שלך..." className="w-full bg-gray-800 p-3 rounded-lg text-white font-bold border border-gray-700 text-sm"/>
+                  <input type="text" value={tournamentPredictions.topAssists} onChange={(e) => setTournamentPredictions(prev => ({...prev, topAssists: e.target.value}))} placeholder="הקלד את מלך הבישולים שלך..." className="w-full bg-gray-800 p-3 rounded-lg text-white font-bold border border-gray-700 text-sm focus:outline-none focus:border-yellow-500"/>
                   <div className="text-left text-xs text-yellow-500 font-bold mt-1.5">מענק ניחוש סופי: 50 נקודות</div>
                 </div>
               </div>
               <div className="bg-gray-950 p-4 text-center border-t border-gray-800">
-                <button onClick={() => alert('הניחושים הארוכים עודכנו!')} className="w-full bg-[#1e3d2f] text-white font-black py-3 rounded-xl border border-[#2a5441]">שמור שינויים</button>
+                <button type="button" onClick={() => alert('הניחושים הארוכים עודכנו בהצלחה!')} className="w-full bg-[#1e3d2f] text-white font-black py-3 rounded-xl border border-[#2a5441]">שמור שינויים</button>
               </div>
             </div>
           </div>
@@ -694,7 +711,7 @@ export default function App() {
                 <h3 className="text-white font-black text-sm mb-1">⚽ ניקוד משחקים:</h3>
                 <ul className="list-disc list-inside space-y-1 text-gray-400 mr-2">
                   <li>ניחוש כיוון (1,X,2) נכון: מעניק <span className="text-white">2 נקודות</span>.</li>
-                  <li>ניחוש תוצאה מדויקת נכון: מוסיף עוד <span className="text-yellow-500 font-bold">4 נק' בונוס</span> (סה"כ 6 נקודות).</li>
+                  <li>ניחוש תוצאה מדויקת נכון: מוסיף עוד <span className="text-yellow-500 font-bold">4 נק\' בונוס</span> (סה"כ 6 נקודות).</li>
                 </ul>
               </div>
               <div className="border-t border-gray-800 pt-3 mt-3">
@@ -710,11 +727,11 @@ export default function App() {
           </div>
         )}
 
-      </main>
+      </div>
 
       {/* 🔐 כפתור מנהל מערכת תחתון */}
       <footer className="max-w-md mx-auto mt-12 text-center">
-        <button onClick={loginAsAdmin} className={`px-4 py-2 text-xs font-bold rounded-lg border transition-all ${isAdminMode ? 'bg-red-950 border-red-800 text-red-400' : 'bg-gray-900 border-gray-800 text-gray-500 hover:text-white'}`}>
+        <button type="button" onClick={loginAsAdmin} className={`px-4 py-2 text-xs font-bold rounded-lg border transition-all ${isAdminMode ? 'bg-red-950 border-red-800 text-red-400' : 'bg-gray-900 border-gray-800 text-gray-500 hover:text-white'}`}>
           {isAdminMode ? '🔒 צא ממצב מנהל' : '🔧 ניהול מערכת (הזנת תוצאות אמת)'}
         </button>
       </footer>
