@@ -94,7 +94,7 @@ const allFixtures = {
   ],
   11: [
     { id: 1, home: 'מכבי פ"ת', away: 'הפועל ת"א', time: '28/11/26' },
-    { id: 2, home: 'מכבי נתניה', away: 'הפועל ב"ש', time: '28/11/26' },
+    { id: 2, home: 'מכbi נתניה', away: 'הפועל ב"ש', time: '28/11/26' },
     { id: 3, home: 'בני סכנין', away: 'מכבי חיפה', time: '28/11/26' },
     { id: 4, home: 'בית"ר י-ם', away: 'הפועל י-ם', time: '28/11/26' },
     { id: 5, home: 'הפועל חיפה', away: 'עירוני דורות טבריה', time: '28/11/26' },
@@ -243,10 +243,10 @@ export default function App() {
   const [matchday, setMatchday] = useState(1);
   const [predictions, setPredictions] = useState({});
   
-  // ניהול ניחושי הטורניר הארוכים (אלופה, מלך שערים, מלך בישולים)
+  // ניהול ניחושי הטורניר הארוכים - כעת מאותחלים ריקים לחלוטין!
   const [tournamentPredictions, setTournamentPredictions] = useState({
-    champion: 'ספרד',
-    topScorer: 'קיליאן אמבפה',
+    champion: '',
+    topScorer: '',
     topAssists: ''
   });
 
@@ -291,7 +291,7 @@ export default function App() {
         </h1>
       </header>
 
-      {/* תפריט לשוניות עליון מורחב ל-4 טאבים (חלק ונוח לנייד) */}
+      {/* תפריט לשוניות עליון */}
       <nav className="max-w-md mx-auto mt-4 grid grid-cols-4 gap-1 bg-gray-900 p-1 rounded-xl border border-gray-800">
         <button
           onClick={() => setCurrentTab('predictions')}
@@ -351,7 +351,6 @@ export default function App() {
                       <span className="font-bold text-base text-gray-100 w-5/12 text-left break-words">{game.away}</span>
                     </div>
 
-                    {/* תוצאה מדויקת פלוס ומינוס */}
                     <div className="flex justify-between items-center bg-gray-950 p-3 rounded-xl border border-gray-800/80 mt-1">
                       <span className="text-xs font-bold text-gray-400">תוצאה מדויקת:</span>
                       <div className="flex items-center gap-3" style={{ direction: 'ltr' }}>
@@ -391,14 +390,11 @@ export default function App() {
           </div>
         )}
 
-        {/* לשונית 2: ניחושי טורניר ארוכי טווח (כרטיסיית פרופיל בהשראת 1000167392.jpg) */}
+        {/* לשונית 2: ניחושי טורניר ארוכי טווח */}
         {currentTab === 'tournament' && (
           <div className="space-y-6">
-            
-            {/* כרטיס המשתמש הראשי */}
             <div className="bg-[#1e3d2f] border border-[#2a5441] rounded-2xl overflow-hidden shadow-2xl">
               
-              {/* חלק עליון: פרופיל ועיגול הלוגו */}
               <div className="p-6 text-center border-b border-[#2a5441]/60 flex flex-col items-center">
                 <div className="w-24 h-24 bg-yellow-500 rounded-full flex flex-col items-center justify-center border-4 border-[#12261d] relative shadow-inner">
                   <span className="text-gray-950 font-black text-[13px] leading-tight">5 חבר'ה</span>
@@ -410,12 +406,11 @@ export default function App() {
                 </h2>
               </div>
 
-              {/* גוף הכרטיס: שדות הבחירה לכל משתמש */}
               <div className="bg-gray-900 p-5 space-y-5">
                 
                 {/* שדה 1: האלופה */}
                 <div className="bg-gray-950 p-4 rounded-xl border border-gray-800 shadow-md">
-                  <label className="block text-sm font-black text-gray-300 mb-2 flex items-center gap-2">
+                  <label className="block text-sm font-black text-gray-300 mb-2">
                     🏆 האלופה שלי:
                   </label>
                   <input 
@@ -430,7 +425,7 @@ export default function App() {
 
                 {/* שדה 2: מלך השערים */}
                 <div className="bg-gray-950 p-4 rounded-xl border border-gray-800 shadow-md">
-                  <label className="block text-sm font-black text-gray-300 mb-2 flex items-center gap-2">
+                  <label className="block text-sm font-black text-gray-300 mb-2">
                     👟 מלך השערים שלי:
                   </label>
                   <input 
@@ -440,12 +435,12 @@ export default function App() {
                     placeholder="הקלד את מלך השערים שלך..."
                     className="w-full bg-gray-800 p-3 rounded-lg text-white font-bold border border-gray-700 focus:outline-none focus:border-yellow-500 text-sm"
                   />
-                  <div className="text-left text-xs text-yellow-500 font-bold mt-1.5">+ 8 נק' שנצברו על שערים</div>
+                  <div className="text-left text-xs text-yellow-500 font-bold mt-1.5">מענק מלך השערים: 20 נקודות</div>
                 </div>
 
                 {/* שדה 3: מלך הבישולים */}
                 <div className="bg-gray-950 p-4 rounded-xl border border-gray-800 shadow-md">
-                  <label className="block text-sm font-black text-gray-300 mb-2 flex items-center gap-2">
+                  <label className="block text-sm font-black text-gray-300 mb-2">
                     🎯 מלך הבישולים שלי:
                   </label>
                   <input 
@@ -460,10 +455,9 @@ export default function App() {
 
               </div>
 
-              {/* כפתור שמירה תחתון מובנה ומעוצב בדיוק כמו בתמונה */}
               <div className="bg-gray-950 p-4 text-center border-t border-gray-800">
                 <button
-                  onClick={() => alert('הניחושים הארוכים שלך עודכנו בהצלחה בכרטיס המשתמש!')}
+                  onClick={() => alert('הניחושים הארוכים עודכנו בהצלחה!')}
                   className="w-full bg-[#1e3d2f] hover:bg-[#254d3b] text-white font-black py-3 rounded-xl shadow-lg transition-all text-center block text-base border border-[#2a5441]"
                 >
                   שמור שינויים
