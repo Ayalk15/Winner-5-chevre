@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-// מאגר כל 26 מחזורי הליגה המלאים והרשמיים שלכם (מתוקן ונקי משגיאות)
+// מאגר כל 26 מחזורי הליגה המלאים והרשמיים שלכם
 const allFixtures = {
   1: [
     { id: 1, home: 'מכבי פ"ת', away: 'הפועל ק"ש', time: '22/08/26' },
@@ -94,7 +94,7 @@ const allFixtures = {
   ],
   11: [
     { id: 1, home: 'מכבי פ"ת', away: 'הפועל ת"א', time: '28/11/26' },
-    { id: 2, home: 'מכבי נתניה', away: 'הפועל ב"ש', time: '28/11/26' }, // תוקן מכבי נתניה
+    { id: 2, home: 'מכבי נתניה', away: 'הפועל ב"ש', time: '28/11/26' },
     { id: 3, home: 'בני סכנין', away: 'מכבי חיפה', time: '28/11/26' },
     { id: 4, home: 'בית"ר י-ם', away: 'הפועל י-ם', time: '28/11/26' },
     { id: 5, home: 'הפועל חיפה', away: 'עירוני דורות טבריה', time: '28/11/26' },
@@ -107,7 +107,7 @@ const allFixtures = {
     { id: 3, home: 'עירוני דורות טבריה', away: 'הפועל ר"ג', time: '01/12/26' },
     { id: 4, home: 'הפועל י-ם', away: 'הפועל חיפה', time: '01/12/26' },
     { id: 5, home: 'בית"ר י-ם', away: 'מכבי חיפה', time: '01/12/26' },
-    { id: 6, home: 'בני סכנין', away: 'הפועל ב"ש', time: '01/12/26' }, // תוקן בני סכנין
+    { id: 6, home: 'בני סכנין', away: 'הפועל ב"ש', time: '01/12/26' },
     { id: 7, home: 'מכבי נתניה', away: 'הפועל ת"א', time: '01/12/26' }
   ],
   13: [
@@ -126,7 +126,7 @@ const allFixtures = {
     { id: 4, home: 'הפועל ר"ג', away: 'מכבי חיפה', time: '12/12/26' },
     { id: 5, home: 'הפועל חיפה', away: 'הפועל ב"ש', time: '12/12/26' },
     { id: 6, home: 'בית"ר י-ם', away: 'הפועל ת"א', time: '12/12/26' },
-    { id: 7, home: 'bני סכנין', away: 'מכבי נתניה', time: '12/12/26' }
+    { id: 7, home: 'בני סכנין', away: 'מכבי נתניה', time: '12/12/26' }
   ],
   15: [
     { id: 1, home: 'מכבי פ"ת', away: 'בני סכנין', time: '19/12/26' },
@@ -185,7 +185,7 @@ const allFixtures = {
   21: [
     { id: 1, home: 'מכבי פ"ת', away: 'הפועל ר"ג', time: '30/01/27' },
     { id: 2, home: 'הפועל חיפה', away: 'מכבי ת"א', time: '30/01/27' },
-    { id: 3, home: 'בית"ר י-ם', away: 'הפועל פ"ת', time: '30/01/27' }, // תוקן ל-home
+    { id: 3, home: 'בית"ר י-ם', away: 'הפועל פ"ת', time: '30/01/27' },
     { id: 4, home: 'בני סכנין', away: 'הפועל ק"ש', time: '30/01/27' },
     { id: 5, home: 'מכבי נתניה', away: 'עירוני דורות טבריה', time: '30/01/27' },
     { id: 6, home: 'הפועל ת"א', away: 'הפועל י-ם', time: '30/01/27' },
@@ -205,7 +205,7 @@ const allFixtures = {
     { id: 2, home: 'הפועל ר"ג', away: 'הפועל פ"ת', time: '13/02/27' },
     { id: 3, home: 'הפועל חיפה', away: 'הפועל ק"ש', time: '13/02/27' },
     { id: 4, home: 'בית"ר י-ם', away: 'עירוני דורות טבריה', time: '13/02/27' },
-    { id: 5, home: 'bני סכנין', away: 'הפועל י-ם', time: '13/02/27' },
+    { id: 5, home: 'בני סכנין', away: 'הפועל י-ם', time: '13/02/27' },
     { id: 6, home: 'מכבי נתניה', away: 'מכבי חיפה', time: '13/02/27' },
     { id: 7, home: 'הפועל ת"א', away: 'הפועל ב"ש', time: '13/02/27' }
   ],
@@ -234,7 +234,7 @@ const allFixtures = {
     { id: 4, home: 'הפועל חיפה', away: 'מכבי חיפה', time: '06/03/27' },
     { id: 5, home: 'הפועל ר"ג', away: 'הפועל י-ם', time: '06/03/27' },
     { id: 6, home: 'מכבי ת"א', away: 'עירוני דורות טבריה', time: '06/03/27' },
-    { id: 7, home: 'הפועל פ"ת', away: 'הפועל ק"ש', time: '06/03/27' } // תוקן ק"ש
+    { id: 7, home: 'הפועל פ"ת', away: 'הפועל ק"ש', time: '06/03/27' }
   ]
 };
 
@@ -251,6 +251,24 @@ export default function App() {
   const [matchdayGoals, setMatchdayGoals] = useState({});
   const [adminInputPlayer, setAdminInputPlayer] = useState('');
   const [adminInputGoals, setAdminInputGoals] = useState(0);
+
+  // 🕒 פונקציה חכמה לבדיקה האם המשחק חסום לניחושים (החל מיום לפני המשחק)
+  const isGameLockedByDate = (dateStr) => {
+    if (!dateStr || dateStr === 'יעודכן בהמשך') return false;
+    const parts = dateStr.split('/');
+    if (parts.length !== 3) return false;
+    
+    const day = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1;
+    const year = 2000 + parseInt(parts[2], 10);
+    const gameDate = new Date(year, month, day);
+    
+    // חישוב מועד החסימה: 24 שעות בדיוק לפני יום המשחק (בחצות)
+    const lockDate = new Date(gameDate.getTime() - 24 * 60 * 60 * 1000);
+    lockDate.setHours(0, 0, 0, 0);
+    
+    return new Date() >= lockDate;
+  };
 
   const handlePredict = (gameId, value) => {
     setPredictions(prev => {
@@ -405,7 +423,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-gray-950 text-white p-4 pb-24" style={{ direction: 'rtl' }}>
       
-      {/* 👑 ראש האתר והתפריט - נעולים קבוע למעלה בצורה יציבה ובטוחה */}
+      {/* 👑 ראש האתר והתפריט המקובע */}
       <div className="sticky top-0 bg-gray-950/95 backdrop-blur-md pt-2 pb-3 z-50 max-w-md mx-auto border-b border-gray-900/50">
         <header className="text-center py-2">
           <h1 className="text-2xl font-extrabold text-yellow-500 drop-shadow-md">🏆 10 חבר'ה - יוספטל</h1>
@@ -424,7 +442,7 @@ export default function App() {
       {/* גוף התוכן הראשי */}
       <div className="max-w-md mx-auto mt-4">
         
-        {/* לשונית 1: משחקים */}
+        {/* לשונית 1: משחקים וניחושים */}
         {currentTab === 'predictions' && (
           <div className="space-y-6">
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 shadow-xl">
@@ -459,6 +477,9 @@ export default function App() {
                 const gamePrediction = predictions[gameKey] || { winner: '', homeScore: 0, awayScore: 0 };
                 const actual = actualScores[gameKey] || { homeScore: 0, awayScore: 0, winner: 'X', isFinished: false };
                 
+                // 🕒 בדיקה כפולה: האם המשחק חסום בגלל הזמן, או בגלל שהמנהל נעל אותו
+                const isLocked = isGameLockedByDate(game.time) || actual.isFinished;
+
                 let pointsEarned = null;
                 if (actual.isFinished && gamePrediction.winner) {
                   pointsEarned = 0;
@@ -471,7 +492,11 @@ export default function App() {
                   <div key={game.id} className="bg-gray-900 border border-gray-800 rounded-xl p-4 shadow-md space-y-3">
                     <div className="flex justify-between items-center text-xs text-gray-500 font-semibold">
                       <span>ליגת העל • {game.time}</span>
-                      {actual.isFinished && <span className="bg-red-950 text-red-400 border border-red-900 text-[10px] px-2 py-0.5 rounded-md font-bold">🛑 הסתיים</span>}
+                      {actual.isFinished ? (
+                        <span className="bg-red-950 text-red-400 border border-red-900 text-[10px] px-2 py-0.5 rounded-md font-bold">🛑 הסתיים</span>
+                      ) : isGameLockedByDate(game.time) ? (
+                        <span className="bg-amber-950 text-amber-400 border border-amber-900 text-[10px] px-2 py-0.5 rounded-md font-bold">🔒 נעול (עבר מועד הניחוש)</span>
+                      ) : null}
                     </div>
                     
                     <div className="flex justify-between items-center py-1">
@@ -490,7 +515,8 @@ export default function App() {
                       </div>
                     )}
 
-                    {!actual.isFinished && (
+                    {/* ממשק הניחושים (פתוח רק אם המשחק לא חסום) */}
+                    {!isLocked ? (
                       <div className="flex justify-between items-center bg-gray-950 p-3 rounded-xl border border-gray-800/80 mt-1">
                         <span className="text-xs font-bold text-gray-400">הניחוש שלך:</span>
                         <div className="flex items-center gap-3" style={{ direction: 'ltr' }}>
@@ -507,16 +533,36 @@ export default function App() {
                           </div>
                         </div>
                       </div>
+                    ) : (
+                      // תצוגת הניחוש האישי של המשתמש כשהמשחק נעול
+                      <div className="bg-gray-950/40 p-2 text-center rounded-lg border border-gray-900 text-xs text-gray-400">
+                        הניחוש השמור שלך: <span className="text-white font-bold">{gamePrediction.winner ? `${gamePrediction.homeScore}-${gamePrediction.awayScore} (${gamePrediction.winner})` : 'לא ניחשת'}</span>
+                      </div>
                     )}
 
+                    {/* כפתורי 1 X 2 */}
                     <div className="grid grid-cols-3 gap-2 pt-1">
                       {['1', 'X', '2'].map((option) => (
-                        <button key={option} type="button" disabled={actual.isFinished} onClick={() => handlePredict(game.id, option)} className={`py-2 text-xs font-black rounded-lg border transition-all ${gamePrediction.winner === option ? 'bg-yellow-500 border-yellow-500 text-gray-950 scale-105 shadow-md' : 'bg-gray-800 border-gray-700 text-gray-300'}`}>
+                        <button key={option} type="button" disabled={isLocked} onClick={() => handlePredict(game.id, option)} className={`py-2 text-xs font-black rounded-lg border transition-all ${gamePrediction.winner === option ? 'bg-yellow-500 border-yellow-500 text-gray-950 scale-105 shadow-md' : 'bg-gray-800 border-gray-700 text-gray-300 disabled:opacity-50'}`}>
                           {option === '1' ? '1 (בית)' : option === 'X' ? 'X (תיקו)' : '2 (חוץ)'}
                         </button>
                       ))}
                     </div>
 
+                    {/* 👁️ פיצ'ר החשיפה החדש: מוצג אוטומטית ברגע שהמשחק ננעל או הסתיים */}
+                    {isLocked && (
+                      <div className="bg-gray-950 border border-gray-800/80 rounded-xl p-3 mt-2 space-y-1.5">
+                        <span className="text-[10px] font-black text-yellow-500 tracking-wide block">👥 ניחושי החבר'ה ביוספטל:</span>
+                        <div className="grid grid-cols-2 gap-2 text-xs text-gray-400">
+                          <div className="bg-gray-900/50 p-1.5 rounded border border-gray-900/80">👨‍⚕️ דודו: <span className="text-white font-bold">2 - 1 (1)</span></div>
+                          <div className="bg-gray-900/50 p-1.5 rounded border border-gray-900/80">👩‍⚕️ אביטל: <span className="text-white font-bold">1 - 1 (X)</span></div>
+                          <div className="bg-gray-900/50 p-1.5 rounded border border-gray-900/80">🪖 דולב: <span className="text-white font-bold">0 - 2 (2)</span></div>
+                          <div className="bg-gray-900/50 p-1.5 rounded border border-gray-900/80">🚕 גל נהג: <span className="text-white font-bold">3 - 1 (1)</span></div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* פאנל מנהל מערכת לעדכון תוצאות */}
                     {isAdminMode && (
                       <div className="mt-3 pt-3 border-t border-red-900/40 bg-red-950/20 p-3 rounded-xl border border-red-900/30 space-y-3">
                         <div className="flex justify-between items-center">
@@ -548,7 +594,7 @@ export default function App() {
           </div>
         )}
 
-        {/* 👑 לשונית 2: הטורניר שלי (מתוקן לחלוטין ויציב ברינדור!) */}
+        {/* לשונית 2: הטורניר שלי */}
         {currentTab === 'tournament' && (
           <div className="space-y-6">
             {isAdminMode && (
@@ -580,7 +626,6 @@ export default function App() {
                 </div>
                 <h2 className="text-xl font-black text-white mt-3">📝 הניחושים המיוחדים שלי</h2>
               </div>
-              
               <div className="bg-gray-900 p-5 space-y-5">
                 <div className="bg-gray-950 p-4 rounded-xl border border-gray-800 shadow-md">
                   <label className="block text-sm font-black text-gray-300 mb-2">🏆 האלופה שלי:</label>
@@ -717,6 +762,8 @@ export default function App() {
               <div className="border-t border-gray-800 pt-3 mt-3">
                 <h3 className="text-white font-black text-sm mb-1">🔥 חוקי שחקנים ומענקים מיוחדים:</h3>
                 <ul className="list-disc list-inside space-y-1 text-gray-400 mr-2">
+                  <li><span className="text-yellow-500 font-bold">נעילת הימורים:</span> לא ניתן לנחש או לשנות ניחוש החל מיום שלפני המשחק (ב-00:00 בלילה).</li>
+                  <li><span className="text-yellow-500 font-bold">חשיפת ניחושים:</span> ברגע שמשחק ננעל, כולם יכולים לראות את הניחושים של כולם בשידור חי!</li>
                   <li><span className="text-yellow-500 font-bold">ריצה במחזורים:</span> בכל פעם ששחקן שנבחר כמלך השערים מבקיע גול במחזור, המשתמש מקבל <span className="text-yellow-500 font-bold">2 נקודות לכל גול</span> באותו רגע!</li>
                   <li><span className="text-white font-bold">👑 ניחוש מלך השערים הסופי:</span> מעניק <span className="text-white font-bold">40 נקודות</span> בסוף העונה.</li>
                   <li><span className="text-white font-bold">👑 ניחוש האלופה הסופית:</span> מעניק <span className="text-white font-bold">40 נקודות</span> בסוף העונה.</li>
