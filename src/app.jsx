@@ -94,7 +94,7 @@ const allFixtures = {
   ],
   11: [
     { id: 1, home: 'מכבי פ"ת', away: 'הפועל ת"א', time: '28/11/26' },
-    { id: 2, home: 'מכbi נתניה', away: 'הפועל ב"ש', time: '28/11/26' },
+    { id: 2, home: 'מכבי נתניה', away: 'הפועל ב"ש', time: '28/11/26' },
     { id: 3, home: 'בני סכנין', away: 'מכבי חיפה', time: '28/11/26' },
     { id: 4, home: 'בית"ר י-ם', away: 'הפועל י-ם', time: '28/11/26' },
     { id: 5, home: 'הפועל חיפה', away: 'עירוני דורות טבריה', time: '28/11/26' },
@@ -185,7 +185,7 @@ const allFixtures = {
   21: [
     { id: 1, home: 'מכבי פ"ת', away: 'הפועל ר"ג', time: '30/01/27' },
     { id: 2, home: 'הפועל חיפה', away: 'מכבי ת"א', time: '30/01/27' },
-    { id: 3, home: 'בית"ר י-ם', away: 'הפועל פ"ת', time: '30/01/27' },
+    { id: 3, border: 'בית"ר י-ם', away: 'הפועל פ"ת', time: '30/01/27' },
     { id: 4, home: 'בני סכנין', away: 'הפועל ק"ש', time: '30/01/27' },
     { id: 5, home: 'מכבי נתניה', away: 'עירוני דורות טבריה', time: '30/01/27' },
     { id: 6, home: 'הפועל ת"א', away: 'הפועל י-ם', time: '30/01/27' },
@@ -234,7 +234,7 @@ const allFixtures = {
     { id: 4, home: 'הפועל חיפה', away: 'מכבי חיפה', time: '06/03/27' },
     { id: 5, home: 'הפועל ר"ג', away: 'הפועל י-ם', time: '06/03/27' },
     { id: 6, home: 'מכבי ת"א', away: 'עירוני דורות טבריה', time: '06/03/27' },
-    { id: 7, home: 'הפועל פ"ת', away: 'הפועל ק"ש', time: '06/03/27' }
+    { id: 7, home: 'הפועל פ"ת', away: 'הפועל קש', time: '06/03/27' }
   ]
 };
 
@@ -243,12 +243,15 @@ export default function App() {
   const [matchday, setMatchday] = useState(1);
   const [predictions, setPredictions] = useState({});
   
-  // ניהול ניחושי הטורניר הארוכים - כעת מאותחלים ריקים לחלוטין!
+  // ניהול ניחושי הטורניר הארוכים (ריקים לחלוטין)
   const [tournamentPredictions, setTournamentPredictions] = useState({
     champion: '',
     topScorer: '',
     topAssists: ''
   });
+
+  // רשימת מנחשים ריקה לחלוטין - מוכנה להרשמה חיה מהעבודה
+  const leaderboard = [];
 
   const handlePredict = (gameId, value) => {
     setPredictions(prev => {
@@ -274,20 +277,12 @@ export default function App() {
     });
   };
 
-  const leaderboard = [
-    { name: 'אילן', points: 18 },
-    { name: 'דודו', points: 15 },
-    { name: 'יוסי', points: 14 },
-    { name: 'גיל', points: 11 },
-    { name: 'משה', points: 9 }
-  ];
-
   return (
     <div className="min-h-screen bg-gray-950 text-white p-4 pb-12" style={{ direction: 'rtl' }}>
-      {/* כותרת ראשית */}
+      {/* כותרת ראשית מעודכנת */}
       <header className="max-w-md mx-auto text-center py-4 border-b border-gray-800">
         <h1 className="text-2xl font-extrabold text-yellow-500 drop-shadow-md">
-          🏆 5 חבר'ה – משחק הניחושים
+          🏆 10 חבר'ה - יוספטל
         </h1>
       </header>
 
@@ -321,7 +316,7 @@ export default function App() {
 
       <main className="max-w-md mx-auto mt-6">
         
-        {/* לשונית 1: ניחושי משחקים מחזוריים */}
+        {/* לשונית 1: משחקים ומחזורים */}
         {currentTab === 'predictions' && (
           <div className="space-y-6">
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 shadow-xl">
@@ -355,15 +350,15 @@ export default function App() {
                       <span className="text-xs font-bold text-gray-400">תוצאה מדויקת:</span>
                       <div className="flex items-center gap-3" style={{ direction: 'ltr' }}>
                         <div className="flex items-center bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
-                          <button type="button" onClick={() => handleScoreChange(game.id, 'away', -1)} className="px-2.5 py-1 text-gray-400 hover:text-white font-black text-sm">-</button>
+                          <button type="button" onClick={() => handleScoreChange(game.id, 'away', -1)} className="px-2.5 py-1 text-gray-400 font-black text-sm">-</button>
                           <span className="px-3 py-1 font-black text-yellow-500 min-w-[28px] text-center bg-gray-900 text-base border-x border-gray-700">{gamePrediction.awayScore}</span>
-                          <button type="button" onClick={() => handleScoreChange(game.id, 'away', 1)} className="px-2.5 py-1 text-gray-400 hover:text-white font-black text-sm">+</button>
+                          <button type="button" onClick={() => handleScoreChange(game.id, 'away', 1)} className="px-2.5 py-1 text-gray-400 font-black text-sm">+</button>
                         </div>
                         <span className="text-gray-600 font-black text-sm">:</span>
                         <div className="flex items-center bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
-                          <button type="button" onClick={() => handleScoreChange(game.id, 'home', -1)} className="px-2.5 py-1 text-gray-400 hover:text-white font-black text-sm">-</button>
+                          <button type="button" onClick={() => handleScoreChange(game.id, 'home', -1)} className="px-2.5 py-1 text-gray-400 font-black text-sm">-</button>
                           <span className="px-3 py-1 font-black text-yellow-500 min-w-[28px] text-center bg-gray-900 text-base border-x border-gray-700">{gamePrediction.homeScore}</span>
-                          <button type="button" onClick={() => handleScoreChange(game.id, 'home', 1)} className="px-2.5 py-1 text-gray-400 hover:text-white font-black text-sm">+</button>
+                          <button type="button" onClick={() => handleScoreChange(game.id, 'home', 1)} className="px-2.5 py-1 text-gray-400 font-black text-sm">+</button>
                         </div>
                       </div>
                     </div>
@@ -390,15 +385,15 @@ export default function App() {
           </div>
         )}
 
-        {/* לשונית 2: ניחושי טורניר ארוכי טווח */}
+        {/* לשונית 2: ניחושים מיוחדים ולוגו מעודכן */}
         {currentTab === 'tournament' && (
           <div className="space-y-6">
             <div className="bg-[#1e3d2f] border border-[#2a5441] rounded-2xl overflow-hidden shadow-2xl">
               
               <div className="p-6 text-center border-b border-[#2a5441]/60 flex flex-col items-center">
                 <div className="w-24 h-24 bg-yellow-500 rounded-full flex flex-col items-center justify-center border-4 border-[#12261d] relative shadow-inner">
-                  <span className="text-gray-950 font-black text-[13px] leading-tight">5 חבר'ה</span>
-                  <span className="text-gray-950 text-[9px] tracking-widest font-bold -mt-0.5">משחק הניחושים</span>
+                  <span className="text-gray-950 font-black text-[13px] leading-tight text-center">10 חבר'ה</span>
+                  <span className="text-gray-950 text-[8px] tracking-wider font-bold -mt-0.5">יוספטל</span>
                   <div className="absolute bottom-1 bg-gray-900/80 p-1 rounded-full text-yellow-500 text-[10px]">📷</div>
                 </div>
                 <h2 className="text-xl font-black text-white mt-3 flex items-center gap-2">
@@ -407,12 +402,8 @@ export default function App() {
               </div>
 
               <div className="bg-gray-900 p-5 space-y-5">
-                
-                {/* שדה 1: האלופה */}
                 <div className="bg-gray-950 p-4 rounded-xl border border-gray-800 shadow-md">
-                  <label className="block text-sm font-black text-gray-300 mb-2">
-                    🏆 האלופה שלי:
-                  </label>
+                  <label className="block text-sm font-black text-gray-300 mb-2">🏆 האלופה שלי:</label>
                   <input 
                     type="text"
                     value={tournamentPredictions.champion}
@@ -423,11 +414,8 @@ export default function App() {
                   <div className="text-left text-xs text-yellow-500 font-bold mt-1.5">מענק זכייה: 30 נקודות</div>
                 </div>
 
-                {/* שדה 2: מלך השערים */}
                 <div className="bg-gray-950 p-4 rounded-xl border border-gray-800 shadow-md">
-                  <label className="block text-sm font-black text-gray-300 mb-2">
-                    👟 מלך השערים שלי:
-                  </label>
+                  <label className="block text-sm font-black text-gray-300 mb-2">👟 מלך השערים שלי:</label>
                   <input 
                     type="text"
                     value={tournamentPredictions.topScorer}
@@ -438,11 +426,8 @@ export default function App() {
                   <div className="text-left text-xs text-yellow-500 font-bold mt-1.5">מענק מלך השערים: 20 נקודות</div>
                 </div>
 
-                {/* שדה 3: מלך הבישולים */}
                 <div className="bg-gray-950 p-4 rounded-xl border border-gray-800 shadow-md">
-                  <label className="block text-sm font-black text-gray-300 mb-2">
-                    🎯 מלך הבישולים שלי:
-                  </label>
+                  <label className="block text-sm font-black text-gray-300 mb-2">🎯 מלך הבישולים שלי:</label>
                   <input 
                     type="text"
                     value={tournamentPredictions.topAssists}
@@ -452,13 +437,12 @@ export default function App() {
                   />
                   <div className="text-left text-xs text-gray-400 font-bold mt-1.5">יעניק בונוס בסיום העונה</div>
                 </div>
-
               </div>
 
               <div className="bg-gray-950 p-4 text-center border-t border-gray-800">
                 <button
                   onClick={() => alert('הניחושים הארוכים עודכנו בהצלחה!')}
-                  className="w-full bg-[#1e3d2f] hover:bg-[#254d3b] text-white font-black py-3 rounded-xl shadow-lg transition-all text-center block text-base border border-[#2a5441]"
+                  className="w-full bg-[#1e3d2f] text-white font-black py-3 rounded-xl shadow-lg border border-[#2a5441]"
                 >
                   שמור שינויים
                 </button>
@@ -468,28 +452,35 @@ export default function App() {
           </div>
         )}
 
-        {/* לשונית 3: טבלת מובילים */}
+        {/* לשונית 3: טבלת מובילים ריקה ומעוצבת */}
         {currentTab === 'leaderboard' && (
           <section className="bg-gray-900 border border-gray-800 rounded-xl p-4 shadow-xl">
             <h2 className="text-lg font-bold text-gray-200 mb-3">📊 מצב הטבלה הכללית</h2>
-            <div className="overflow-hidden rounded-lg border border-gray-800">
-              <table className="w-full text-right border-collapse">
-                <thead>
-                  <tr className="bg-gray-800 text-gray-400 text-xs">
-                    <th className="p-3">שם המנחש</th>
-                    <th className="p-3 text-center">נקודות</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-800">
-                  {leaderboard.map((user, idx) => (
-                    <tr key={idx} className="hover:bg-gray-800/50">
-                      <td className="p-3 font-medium text-gray-300">{idx === 0 ? '👑 ' : ''}{user.name}</td>
-                      <td className="p-3 text-center font-bold text-yellow-500">{user.points}</td>
+            {leaderboard.length === 0 ? (
+              <div className="p-8 text-center text-gray-500 text-sm bg-gray-950 rounded-lg border border-gray-800/60 font-medium">
+                🚶‍♂️ אין עדיין מנחשים רשומים בטבלה. <br />
+                <span className="text-xs text-gray-600 mt-1 block">המערכת תתעדכן אוטומטית עם תחילת הרישום!</span>
+              </div>
+            ) : (
+              <div className="overflow-hidden rounded-lg border border-gray-800">
+                <table className="w-full text-right border-collapse">
+                  <thead>
+                    <tr className="bg-gray-800 text-gray-400 text-xs">
+                      <th className="p-3">שם המנחש</th>
+                      <th className="p-3 text-center">נקודות</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody className="divide-y divide-gray-800">
+                    {leaderboard.map((user, idx) => (
+                      <tr key={idx} className="hover:bg-gray-800/50">
+                        <td className="p-3 font-medium text-gray-300">{idx === 0 ? '👑 ' : ''}{user.name}</td>
+                        <td className="p-3 text-center font-bold text-yellow-500">{user.points}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </section>
         )}
 
