@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './app.jsx'
+import app from './app.jsx'
 import './index.css'
 
 // קוד מיוחד שמקפיץ שגיאות ישירות על המסך הלבן במובייל
