@@ -108,7 +108,7 @@ const allFixtures = {
     { id: 4, home: 'הפועל י-ם', away: 'הפועל חיפה', time: '01/12/26' },
     { id: 5, home: 'בית"ר י-ם', away: 'מכבי חיפה', time: '01/12/26' },
     { id: 6, home: 'בני סכנין', away: 'הפועל ב"ש', time: '01/12/26' },
-    { id: 7, home: 'מכבי נתניה', away: 'הפועל ת"א', time: '01/12/26' }
+    { id: 7, home: 'מכbi נתניה', away: 'הפועל ת"א', time: '01/12/26' }
   ],
   13: [
     { id: 1, home: 'מכבי נתניה', away: 'מכבי פ"ת', time: '05/12/26' },
@@ -126,7 +126,7 @@ const allFixtures = {
     { id: 4, home: 'הפועל ר"ג', away: 'מכבי חיפה', time: '12/12/26' },
     { id: 5, home: 'הפועל חיפה', away: 'הפועל ב"ש', time: '12/12/26' },
     { id: 6, home: 'בית"ר י-ם', away: 'הפועל ת"א', time: '12/12/26' },
-    { id: 7, home: 'bני סכנין', away: 'מכבי נתניה', time: '12/12/26' }
+    { id: 7, home: 'בני סכנין', away: 'מכבי נתניה', time: '12/12/26' }
   ],
   15: [
     { id: 1, home: 'מכבי פ"ת', away: 'בני סכנין', time: '19/12/26' },
@@ -224,7 +224,7 @@ const allFixtures = {
     { id: 3, home: 'הפועל ר"ג', away: 'עירוני דורות טבריה', time: '27/02/27' },
     { id: 4, home: 'הפועל חיפה', away: 'הפועל י-ם', time: '27/02/27' },
     { id: 5, home: 'בית"ר י-ם', away: 'מכבי חיפה', time: '27/02/27' },
-    { id: 6, home: 'bני סכנין', away: 'הפועל ב"ש', time: '27/02/27' },
+    { id: 6, home: 'בני סכנין', away: 'הפועל ב"ש', time: '27/02/27' },
     { id: 7, home: 'מכבי נתניה', away: 'הפועל ת"א', time: '27/02/27' }
   ],
   26: [
@@ -318,6 +318,32 @@ const allFixtures = {
 
 const ISRAELI_TEAMS = ['מכבי ת"א', 'מכבי חיפה', 'בית"ר י-ם', 'הפועל ב"ש', 'הפועל ת"א', 'מכבי נתניה', 'הפועל חיפה', 'מכבי פ"ת', 'בני סכנין', 'עירוני דורות טבריה', 'הפועל ק"ש', 'הפועל פ"ת', 'הפועל ר"ג', 'הפועל י-ם'];
 
+// פונקציות עזר גלובליות מחוץ לרכיב - פותר את שגיאות הקומפילציה של Vercel!
+const getGameLockDeadline = (dateStr) => {
+  if (!dateStr || dateStr === 'יעודכן בהמשך') return null;
+  const parts = dateStr.split('/');
+  if (parts.length !== 3) return null;
+  const day = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10) - 1;
+  const year = 2000 + parseInt(parts[2], 10);
+  const gameDate = new Date(year, month, day);
+  const lockDate = new Date(gameDate.getTime() - 24 * 60 * 60 * 1000);
+  lockDate.setHours(0, 0, 0, 0);
+  return lockDate;
+};
+
+const isGameLockedByDate = (dateStr) => {
+  const deadline = getGameLockDeadline(dateStr);
+  if (!deadline) return false;
+  return new Date() >= deadline;
+};
+
+const isTournamentLocked = () => {
+  const startOfSeason = new Date(2026, 7, 22);
+  startOfSeason.setHours(0, 0, 0, 0);
+  return new Date() >= startOfSeason;
+};
+
 export default function App() {
   const [currentTab, setCurrentTab] = useState('predictions');
   const [matchday, setMatchday] = useState(1);
@@ -332,37 +358,9 @@ export default function App() {
   const [adminInputPlayer, setAdminInputPlayer] = useState('');
   const [adminInputGoals, setAdminInputGoals] = useState(0);
   const [jokers, setJokers] = useState({});
-
-  // ⏱️ מערך זיכרון לשעון העצר של המחזור הנוכחי
   const [countdownText, setCountdownText] = useState('');
 
-  // פונקציית בדיקה וחישוב זמני החסימה
-  const getGameLockDeadline = (dateStr) => {
-    if (!dateStr || dateStr === 'יעודכן בהמשך') return null;
-    const parts = dateStr.split('/');
-    if (parts.length !== 3) return null;
-    const day = parseInt(parts[0], 10);
-    const month = parseInt(parts[1], 10) - 1;
-    const year = 2000 + parseInt(parts[2], 10);
-    const gameDate = new Date(year, month, day);
-    const lockDate = new Date(gameDate.getTime() - 24 * 60 * 60 * 1000);
-    lockDate.setHours(0, 0, 0, 0);
-    return lockDate;
-  };
-
-  const isGameLockedByDate = (dateStr) => {
-    const deadline = getGameLockDeadline(dateStr);
-    if (!deadline) return false;
-    return new Date() >= deadline;
-  };
-
-  const isTournamentLocked = () => {
-    const startOfSeason = new Date(2026, 7, 22);
-    startOfSeason.setHours(0, 0, 0, 0);
-    return new Date() >= startOfSeason;
-  };
-
-  // ⏱️ מנגנון הפעלת שעון העצר בלייב לפי המחזור הנבחר
+  // שעון עצר דינמי
   useEffect(() => {
     const updateTimer = () => {
       const fixtures = allFixtures[matchday];
@@ -370,7 +368,6 @@ export default function App() {
         setCountdownText('');
         return;
       }
-      // מוצאים את מועד החסימה המוקדם ביותר של משחקי המחזור
       let earliestDeadline = null;
       fixtures.forEach(g => {
         const d = getGameLockDeadline(g.time);
@@ -396,7 +393,7 @@ export default function App() {
     };
 
     updateTimer();
-    const interval = setInterval(updateTimer, 60000); // עדכון כל דקה
+    const interval = setInterval(updateTimer, 60000);
     return () => clearInterval(interval);
   }, [matchday]);
 
@@ -570,13 +567,7 @@ export default function App() {
   };
 
   const currentMatchdayScore = getMatchdayScoreOnly();
-  const goalsPoints = getLiveGoalsPointsOnly();
   
-  const userTeamSuffix = tournamentPredictions.favoriteTeam ? ` (${tournamentPredictions.favoriteTeam})` : '';
-  
-  // 📈 סימולציית מגמת חצי המיקום בטבלה: מאחר ויש מנחש יחיד, המגמה קבועה. כשיחוברו משתמשים נוספים המנגנון ישווה מיקומים.
-  const leaderboard = stats.totalPoints > 0 ? [{ name: `אייל אשכנזי${userTeamSuffix}`, points: stats.totalPoints, trend: '–' }] : [];
-
   function getLiveGoalsPointsOnly() {
     let pts = 0;
     const currentScorer = tournamentPredictions?.topScorer || '';
@@ -590,10 +581,13 @@ export default function App() {
     return pts;
   }
 
+  const goalsPoints = getLiveGoalsPointsOnly();
+  const userTeamSuffix = tournamentPredictions.favoriteTeam ? ` (${tournamentPredictions.favoriteTeam})` : '';
+  const leaderboard = stats.totalPoints > 0 ? [{ name: `אייל אשכנזי${userTeamSuffix}`, points: stats.totalPoints, trend: '–' }] : [];
+
   return (
     <div className="min-h-screen bg-gray-950 text-white p-4 pb-24" style={{ direction: 'rtl' }}>
       
-      {/* 👑 ראש האתר והתפריט המקובע */}
       <div className="sticky top-0 bg-gray-950/95 backdrop-blur-md pt-2 pb-3 z-50 max-w-md mx-auto border-b border-gray-900/50">
         <header className="text-center py-2">
           <h1 className="text-2xl font-extrabold text-yellow-500 drop-shadow-md">🏆 10 חבר'ה - יוספטל</h1>
@@ -611,7 +605,6 @@ export default function App() {
 
       <div className="max-w-md mx-auto mt-4">
         
-        {/* לשונית 1: משחקים */}
         {currentTab === 'predictions' && (
           <div className="space-y-6">
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 shadow-xl space-y-3">
@@ -622,7 +615,6 @@ export default function App() {
                 </select>
               </div>
 
-              {/* ⏱️ שורת תצוגה דינמית לשעון העצר והטיימר של המחזור */}
               {countdownText && (
                 <div className={`p-2 rounded-lg text-center text-xs font-black border ${countdownText.includes('🔒') ? 'bg-red-950/40 border-red-900 text-red-400' : 'bg-amber-950/30 border-amber-900/60 text-amber-400'}`}>
                   {countdownText}
@@ -703,7 +695,7 @@ export default function App() {
                         <span className="text-xs font-bold text-gray-400">תוצאת אמת סופית:</span>
                         <span className="font-black text-sm text-yellow-500">{actual.homeScore} - {actual.awayScore}</span>
                         <span className={`text-xs font-black px-2 py-0.5 rounded ${pointsEarned > 0 ? 'bg-green-950 text-green-400' : 'bg-gray-800 text-gray-400'}`}>
-                          {pointsEarned > 0 ? `👍 זכית (+${pointsEarned})` : '0 נק\''}
+                          {pointsEarned > 0 ? `👍 זכית (+${pointsEarned})` : '0 נק\'}
                         </span>
                       </div>
                     )}
@@ -948,7 +940,6 @@ export default function App() {
                   <tbody className="divide-y divide-gray-800">
                     {leaderboard.map((user, idx) => (
                       <tr key={idx} className="hover:bg-gray-800/50 bg-gray-900">
-                        {/* 📈 שילוב פיצ'ר חצי המגמה הדינמיים בטבלה */}
                         <td className="p-3 font-bold text-center text-xs text-gray-400 bg-gray-950/20">
                           {idx + 1} <span className="text-gray-500 mx-1">{user.trend}</span>
                         </td>
@@ -978,30 +969,4 @@ export default function App() {
               </div>
               <div className="border-t border-gray-800 pt-3 mt-3">
                 <h3 className="text-white font-black text-sm mb-1">🔥 חוקי שחקנים ומענקים מיוחדים:</h3>
-                <ul className="list-disc list-inside space-y-1 text-gray-400 mr-2">
-                  <li><span className="text-yellow-500 font-bold">⏱️ דדליין ונעילה אוטומטית:</span> לא ניתן לנחש או לשנות ניחוש של משחק החל מיום שלפני המחזור (שעון עצר מופיע בראש המסך!).</li>
-                  <li><span className="text-yellow-500 font-bold">🔒 נעילת הטורניר שלי:</span> הבחירות לאלופה, מלך שערים, מלך בישולים וקבוצה אהודה יינעלו לחלוטין ברגע שהמחזור הראשון ייפתח.</li>
-                  <li><span className="text-yellow-500 font-bold">📈 חצי מגמה:</span> חצי המגמה בטבלה (▲ / ▼ / –) מציגים בכל מחזור את תנועת המיקומים של השחקנים.</li>
-                  <li><span className="text-yellow-500 font-bold">חשיפת ניחושים:</span> ברגע שמשחק ננעל, כולם יכולים לראות את הניחושים של כולם בלייב!</li>
-                  <li><span className="text-yellow-500 font-bold">ריצה במחזורים:</span> בכל פעם ששחקן שנבחר כמלך השערים מבקיע גול במחזור, המשתמש מקבל <span className="text-yellow-500 font-bold">2 נקודות לכל גול</span> באותו רגע!</li>
-                  <li><span className="text-white font-bold">👑 ניחוש מלך השערים הסופי:</span> מעניק <span className="text-white font-bold">40 נקודות</span> בסוף העונה.</li>
-                  <li><span className="text-white font-bold">👑 ניחוש האלופה הסופית:</span> מעניק <span className="text-white font-bold">40 נקודות</span> בסוף העונה.</li>
-                  <li><span className="text-white font-bold">👑 ניחוש מלך הבישולים הסופי:</span> מעניק <span className="text-white font-bold">50 נקודות</span> בסוף העונה.</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        )}
-
-      </div>
-
-      {/* 🔐 כפתור מנהל מערכת תחתון */}
-      <footer className="max-w-md mx-auto mt-12 text-center">
-        <button type="button" onClick={loginAsAdmin} className={`px-4 py-2 text-xs font-bold rounded-lg border transition-all ${isAdminMode ? 'bg-red-950 border-red-800 text-red-400' : 'bg-gray-900 border-gray-800 text-gray-500 hover:text-white'}`}>
-          {isAdminMode ? '🔒 צא ממצב מנהל' : '🔧 ניהול מערכת (הזנת תוצאות אמת)'}
-        </button>
-      </footer>
-
-    </div>
-  );
-}
+                <ul className="list-disc list-inside space-y-1 text-gray
