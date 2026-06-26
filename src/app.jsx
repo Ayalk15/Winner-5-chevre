@@ -69,7 +69,7 @@ const allFixtures = {
     { id: 1, home: 'הפועל ר"ג', away: 'מכבי פ"ת', time: '24/10/26' },
     { id: 2, home: 'מכבי ת"א', away: 'הפועל חיפה', time: '24/10/26' },
     { id: 3, home: 'הפועל פ"ת', away: 'בית"ר י-ם', time: '24/10/26' },
-    { id: 4, home: 'הפועל ק"ש', away: 'bני סכנין', time: '24/10/26' },
+    { id: 4, home: 'הפועל ק"ש', away: 'בני סכנין', time: '24/10/26' },
     { id: 5, home: 'עירוני דורות טבריה', away: 'מכבי נתניה', time: '24/10/26' },
     { id: 6, home: 'הפועל י-ם', away: 'הפועל ת"א', time: '24/10/26' },
     { id: 7, home: 'מכבי חיפה', away: 'הפועל ב"ש', time: '24/10/26' }
@@ -167,7 +167,7 @@ const allFixtures = {
   19: [
     { id: 1, home: 'מכבי פ"ת', away: 'הפועל חיפה', time: '16/01/27' },
     { id: 2, home: 'בית"ר י-ם', away: 'הפועל ר"ג', time: '16/01/27' },
-    { id: 3, home: 'bני סכנין', away: 'מכבי ת"א', time: '16/01/27' },
+    { id: 3, home: 'בני סכנין', away: 'מכבי ת"א', time: '16/01/27' },
     { id: 4, home: 'מכבי נתניה', away: 'הפועל פ"ת', time: '16/01/27' },
     { id: 5, home: 'הפועל ת"א', away: 'הפועל ק"ש', time: '16/01/27' },
     { id: 6, home: 'הפועל ב"ש', away: 'עירוני דורות טבריה', time: '16/01/27' },
@@ -212,7 +212,7 @@ const allFixtures = {
   24: [
     { id: 1, home: 'הפועל ת"א', away: 'מכבי פ"ת', time: '20/02/27' },
     { id: 2, home: 'הפועל ב"ש', away: 'מכבי נתניה', time: '20/02/27' },
-    { id: 3, home: 'מכבי חיפה', away: 'bני סכנין', time: '20/02/27' },
+    { id: 3, home: 'מכבי חיפה', away: 'בני סכנין', time: '20/02/27' },
     { id: 4, home: 'הפועל י-ם', away: 'בית"ר י-ם', time: '20/02/27' },
     { id: 5, home: 'עירוני דורות טבריה', away: 'הפועל חיפה', time: '20/02/27' },
     { id: 6, home: 'הפועל ק"ש', away: 'הפועל ר"ג', time: '20/02/27' },
@@ -270,7 +270,7 @@ const allFixtures = {
     { id: 4, home: 'מקום 11', away: 'מקום 12', time: '10/04/27' },
     { id: 5, home: 'מקום 13', away: 'מקום 14', time: '10/04/27' },
     { id: 6, home: 'מקום 7', away: 'מקום 10', time: '10/04/27' },
-    { id: 7, home: 'מקום 8', away: 'מקום 9', time: '10/04/27' }
+    { id: 8, home: 'מקום 8', away: 'מקום 9', time: '10/04/27' }
   ],
   31: [
     { id: 1, home: 'מקום 3', away: 'מקום 6', time: '17/04/27' },
@@ -342,6 +342,25 @@ const isTournamentLocked = () => {
   const startOfSeason = new Date(2026, 7, 22);
   startOfSeason.setHours(0, 0, 0, 0);
   return new Date() >= startOfSeason;
+};
+
+// 🔊 פונקציה גלובלית להפעלת אפקטים קוליים קצרים מחשבון פתוח
+const playSFX = (type) => {
+  try {
+    let url = '';
+    if (type === 'success') {
+      url = 'https://assets.mixkit.co/active_storage/sfx/911/911-84.wav'; // צליל אישור חגיגי
+    } else if (type === 'whistle') {
+      url = 'https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav'; // שריקת שופט חדה
+    }
+    if (url) {
+      const audio = new Audio(url);
+      audio.volume = 0.4; // ווליום נעים
+      audio.play();
+    }
+  } catch (error) {
+    console.log('Audio playback failed', error);
+  }
 };
 
 export default function App() {
@@ -435,11 +454,16 @@ export default function App() {
     });
   };
 
+  // 🔊 שילוב שריקת שופט בנעילת משחק על ידי המנהל
   const toggleGameFinished = (gameId) => {
     setActualScores(prev => {
       const key = `${matchday}-${gameId}`;
       const current = prev[key] || { homeScore: 0, awayScore: 0, winner: 'X', isFinished: false };
-      return { ...prev, [key]: { ...current, isFinished: !current.isFinished } };
+      const nextState = !current.isFinished;
+      if (nextState) {
+        playSFX('whistle'); // שריקת שופט בנעילה
+      }
+      return { ...prev, [key]: { ...current, isFinished: nextState } };
     });
   };
 
@@ -779,6 +803,13 @@ export default function App() {
                 );
               })}
             </section>
+            
+            {/* 🔊 כפתור שמירה קולית לחבר'ה בלשונית משחקים */}
+            <div className="pt-2 text-center">
+              <button type="button" onClick={() => { playSFX('success'); alert('הניחושים למחזור זה נשמרו בהצלחה!'); }} className="w-full bg-yellow-500 text-gray-950 font-black py-3.5 rounded-xl shadow-xl border border-yellow-600 active:scale-95 transition-all text-sm">
+                💾 שמור ניחושי מחזור {matchday}
+              </button>
+            </div>
           </div>
         )}
 
@@ -855,7 +886,7 @@ export default function App() {
               </div>
               <div className="bg-gray-950 p-4 text-center border-t border-gray-800">
                 {!isTournamentLocked() ? (
-                  <button type="button" onClick={() => alert('הניחושים הארוכים עודכנו בהצלחה!')} className="w-full bg-[#1e3d2f] text-white font-black py-3 rounded-xl border border-[#2a5441]">שמור שינויים</button>
+                  <button type="button" onClick={() => { playSFX('success'); alert('הניחושים ארוכי הטווח עודכנו בהצלחה!'); }} className="w-full bg-[#1e3d2f] text-white font-black py-3 rounded-xl border border-[#2a5441]">שמור שינויים</button>
                 ) : (
                   <div className="text-xs text-gray-500 font-bold py-2">🔒 נעול – לא ניתן לבצע שינויים עד סוף העונה</div>
                 )}
@@ -994,7 +1025,6 @@ export default function App() {
 
       </div>
 
-      {/* כפתור מנהל מערכת */}
       <footer className="max-w-md mx-auto mt-12 text-center">
         <button type="button" onClick={loginAsAdmin} className={`px-4 py-2 text-xs font-bold rounded-lg border transition-all ${isAdminMode ? 'bg-red-950 border-red-800 text-red-400' : 'bg-gray-900 border-gray-800 text-gray-500 hover:text-white'}`}>
           {isAdminMode ? '🔒 צא ממצב מנהל' : '🔧 ניהול מערכת (הזנת תוצאות אמת)'}
