@@ -69,7 +69,7 @@ const allFixtures = {
     { id: 1, home: 'הפועל ר"ג', away: 'מכבי פ"ת', time: '24/10/26' },
     { id: 2, home: 'מכבי ת"א', away: 'הפועל חיפה', time: '24/10/26' },
     { id: 3, home: 'הפועל פ"ת', away: 'בית"ר י-ם', time: '24/10/26' },
-    { id: 4, home: 'בני סכנין', away: 'הפועל ק"ש', time: '24/10/26' },
+    { id: 4, home: 'הפועל ק"ש', away: 'bני סכנין', time: '24/10/26' },
     { id: 5, home: 'עירוני דורות טבריה', away: 'מכבי נתניה', time: '24/10/26' },
     { id: 6, home: 'הפועל י-ם', away: 'הפועל ת"א', time: '24/10/26' },
     { id: 7, home: 'מכבי חיפה', away: 'הפועל ב"ש', time: '24/10/26' }
@@ -141,7 +141,7 @@ const allFixtures = {
     { id: 1, home: 'עירוני דורות טבריה', away: 'מכבי פ"ת', time: '29/12/26' },
     { id: 2, home: 'הפועל ק"ש', away: 'הפועל י-ם', time: '29/12/26' },
     { id: 3, home: 'הפועל פ"ת', away: 'מכבי חיפה', time: '29/12/26' },
-    { id: 4, home: 'מכבי ת"א', away: 'הפועל b"ש', time: '29/12/26' },
+    { id: 4, home: 'מכבי ת"א', away: 'הפועל ב"ש', time: '29/12/26' },
     { id: 5, home: 'הפועל ר"ג', away: 'הפועל ת"א', time: '29/12/26' },
     { id: 6, home: 'הפועל חיפה', away: 'מכבי נתניה', time: '29/12/26' },
     { id: 7, home: 'בית"ר י-ם', away: 'בני סכנין', time: '29/12/26' }
@@ -167,7 +167,7 @@ const allFixtures = {
   19: [
     { id: 1, home: 'מכבי פ"ת', away: 'הפועל חיפה', time: '16/01/27' },
     { id: 2, home: 'בית"ר י-ם', away: 'הפועל ר"ג', time: '16/01/27' },
-    { id: 3, home: 'בני סכנין', away: 'מכבי ת"א', time: '16/01/27' },
+    { id: 3, home: 'bני סכנין', away: 'מכבי ת"א', time: '16/01/27' },
     { id: 4, home: 'מכבי נתניה', away: 'הפועל פ"ת', time: '16/01/27' },
     { id: 5, home: 'הפועל ת"א', away: 'הפועל ק"ש', time: '16/01/27' },
     { id: 6, home: 'הפועל ב"ש', away: 'עירוני דורות טבריה', time: '16/01/27' },
@@ -212,7 +212,7 @@ const allFixtures = {
   24: [
     { id: 1, home: 'הפועל ת"א', away: 'מכבי פ"ת', time: '20/02/27' },
     { id: 2, home: 'הפועל ב"ש', away: 'מכבי נתניה', time: '20/02/27' },
-    { id: 3, home: 'מכבי חיפה', away: 'בני סכנין', time: '20/02/27' },
+    { id: 3, home: 'מכבי חיפה', away: 'bני סכנין', time: '20/02/27' },
     { id: 4, home: 'הפועל י-ם', away: 'בית"ר י-ם', time: '20/02/27' },
     { id: 5, home: 'עירוני דורות טבריה', away: 'הפועל חיפה', time: '20/02/27' },
     { id: 6, home: 'הפועל ק"ש', away: 'הפועל ר"ג', time: '20/02/27' },
@@ -344,65 +344,6 @@ const isTournamentLocked = () => {
   return new Date() >= startOfSeason;
 };
 
-// 🔊 סינתזת שמע חכמה ודיגיטלית (Audio Synthesis) - עוקף את חסימות ה-CORS בניידים לחלוטין!
-const playSynthSFX = (type) => {
-  try {
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContext) return;
-    const ctx = new AudioContext();
-    const now = ctx.currentTime;
-    
-    if (type === 'success') {
-      // 🎶 צליל הצלחה דיגיטלי חגיגי - שתי נגינות עולות ומהירות
-      const osc1 = ctx.createOscillator();
-      const gain1 = ctx.createGain();
-      osc1.type = 'sine';
-      osc1.frequency.setValueAtTime(523.25, now); // תו ראשון C5
-      gain1.gain.setValueAtTime(0.2, now);
-      gain1.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
-      osc1.connect(gain1);
-      gain1.connect(ctx.destination);
-      osc1.start(now);
-      osc1.stop(now + 0.12);
-      
-      const osc2 = ctx.createOscillator();
-      const gain2 = ctx.createGain();
-      osc2.type = 'sine';
-      osc2.frequency.setValueAtTime(659.25, now + 0.08); // תו שני עולה E5
-      gain2.gain.setValueAtTime(0.2, now + 0.08);
-      gain2.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
-      osc2.connect(gain2);
-      gain2.connect(ctx.destination);
-      osc2.start(now + 0.08);
-      osc2.stop(now + 0.25);
-      
-    } else if (type === 'whistle') {
-      // 🟨 משרוקית שופט חדה - תדר גבוה רוטט ומקצועי
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'square';
-      osc.frequency.setValueAtTime(1250, now);
-      
-      // יצירת רטט מהיר המדמה משרוקית כדורגל אמיתית
-      osc.frequency.linearRampToValueAtTime(1300, now + 0.04);
-      osc.frequency.linearRampToValueAtTime(1200, now + 0.08);
-      osc.frequency.linearRampToValueAtTime(1300, now + 0.12);
-      osc.frequency.linearRampToValueAtTime(1200, now + 0.16);
-      
-      gain.gain.setValueAtTime(0.15, now);
-      gain.gain.linearRampToValueAtTime(0.15, now + 0.18);
-      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.22);
-      
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(now);
-      osc.stop(now + 0.22);
-    }
-  } catch (error) {
-    console.log('Synth audio blocked or failed', error);
-  }
-};
-
 export default function App() {
   const [currentTab, setCurrentTab] = useState('predictions');
   const [matchday, setMatchday] = useState(1);
@@ -416,25 +357,8 @@ export default function App() {
   const [adminInputGoals, setAdminInputGoals] = useState(0);
   const [jokers, setJokers] = useState({});
   const [countdownText, setCountdownText] = useState('');
-  
-  // ⏱️ סטייט חדש לשמירת התאריך והשעה החיים על המסך
-  const [liveClockText, setLiveClockText] = useState('');
 
-  // ⏱️ מנגנון הפעלת השעון הדיגיטלי החי (Live Clock) מתעדכן כל שנייה
-  useEffect(() => {
-    const updateClock = () => {
-      const now = new Date();
-      const options = { weekday: 'long', year: 'numeric', month: '2-digit', day: '2-digit' };
-      const dateStr = now.toLocaleDateString('he-IL', options);
-      const timeStr = now.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-      setLiveClockText(`${dateStr} • ${timeStr}`);
-    };
-    updateClock();
-    const interval = setInterval(updateClock, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  // שעון עצר לדדליין מחזורי
+  // שעון עצר דינמי
   useEffect(() => {
     const updateTimer = () => {
       const fixtures = allFixtures[matchday];
@@ -511,16 +435,11 @@ export default function App() {
     });
   };
 
-  // הפעלת שריקה פנימית בנעילת משחק על ידי המנהל
   const toggleGameFinished = (gameId) => {
     setActualScores(prev => {
       const key = `${matchday}-${gameId}`;
       const current = prev[key] || { homeScore: 0, awayScore: 0, winner: 'X', isFinished: false };
-      const nextState = !current.isFinished;
-      if (nextState) {
-        playSynthSFX('whistle'); // 🔊 שריקת משרוקית דיגיטלית ישירה
-      }
-      return { ...prev, [key]: { ...current, isFinished: nextState } };
+      return { ...prev, [key]: { ...current, isFinished: !current.isFinished } };
     });
   };
 
@@ -550,6 +469,20 @@ export default function App() {
       delete updated[playerKey];
       return updated;
     });
+  };
+
+  const loginAsAdmin = () => {
+    if (isAdminMode) {
+      setIsAdminMode(false);
+    } else {
+      const pass = prompt('הכנס סיסמת מנהל מערכת:');
+      if (pass === '2531') {
+        setIsAdminMode(true);
+        alert('התחברת בהצלחה כמנהל!');
+      } else if (pass !== null) {
+        alert('סיסמה שגויה!');
+      }
+    }
   };
 
   const getLiveStatistics = () => {
@@ -647,11 +580,11 @@ export default function App() {
   const currentMatchdayScore = getMatchdayScoreOnly();
 
   let goalsPoints = 0;
-  const currentScorerName = tournamentPredictions?.topScorer || '';
-  if (currentScorerName.trim()) {
+  const currentScorer = tournamentPredictions?.topScorer || '';
+  if (currentScorer.trim()) {
     Object.keys(matchdayGoals).forEach(key => {
       const parts = key.split('-');
-      if (parts.length >= 2 && parts[1].trim() === currentScorerName.trim()) {
+      if (parts.length >= 2 && parts[1].trim() === currentScorer.trim()) {
         goalsPoints += (matchdayGoals[key] || 0) * 2;
       }
     });
@@ -663,22 +596,13 @@ export default function App() {
   return (
     <div className="min-h-screen bg-gray-950 text-white p-4 pb-24" style={{ direction: 'rtl' }}>
       
-      {/* 👑 ראש האתר ותפריט המקובע */}
       <div className="sticky top-0 bg-gray-950/95 backdrop-blur-md pt-2 pb-3 z-50 max-w-md mx-auto border-b border-gray-900/50">
-        <header className="text-center py-1">
+        <header className="text-center py-2">
           <h1 className="text-2xl font-extrabold text-yellow-500 drop-shadow-md">🏆 10 חבר'ה - יוספטל</h1>
-          
-          {/* ⏱️ שורת הצגת התאריך והשעה החיים באתר */}
-          {liveClockText && (
-            <div className="text-[10px] text-gray-400 font-bold mt-0.5 tracking-wide bg-gray-900/40 inline-block px-3 py-0.5 rounded-full border border-gray-800/40 shadow-inner">
-              {liveClockText}
-            </div>
-          )}
-          
-          {isAdminMode && <span className="block w-max mx-auto bg-red-950 text-red-400 border border-red-900 Richmond-font text-[9px] px-2 py-0.5 rounded-full mt-1.5 animate-pulse font-bold">🛠️ פאנל מנהל פעיל</span>}
+          {isAdminMode && <span className="inline-block bg-red-950 text-red-400 border border-red-900 font-bold text-[10px] px-2 py-0.5 rounded-full mt-1 animate-pulse">🛠️ פאנל מנהל פעיל</span>}
         </header>
 
-        <nav className="grid grid-cols-5 gap-0.5 bg-gray-900 p-1 rounded-xl border border-gray-800 mt-2">
+        <nav className="grid grid-cols-5 gap-0.5 bg-gray-900 p-1 rounded-xl border border-gray-800">
           <button type="button" onClick={() => setCurrentTab('predictions')} className={`py-2 text-[9px] font-black rounded-lg transition-all ${currentTab === 'predictions' ? 'bg-yellow-500 text-gray-950 shadow-md' : 'text-gray-400'}`}>⚽ משחקים</button>
           <button type="button" onClick={() => setCurrentTab('tournament')} className={`py-2 text-[9px] font-black rounded-lg transition-all ${currentTab === 'tournament' ? 'bg-yellow-500 text-gray-950 shadow-md' : 'text-gray-400'}`}>👑 הטורניר שלי</button>
           <button type="button" onClick={() => setCurrentTab('stats')} className={`py-2 text-[9px] font-black rounded-lg transition-all ${currentTab === 'stats' ? 'bg-yellow-500 text-gray-950 shadow-md' : 'text-gray-400'}`}>📈 סטטיסטיקה</button>
@@ -689,7 +613,6 @@ export default function App() {
 
       <div className="max-w-md mx-auto mt-4">
         
-        {/* לשונית 1: משחקים */}
         {currentTab === 'predictions' && (
           <div className="space-y-6">
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 shadow-xl space-y-3">
@@ -856,13 +779,6 @@ export default function App() {
                 );
               })}
             </section>
-            
-            <div className="pt-2 text-center">
-              {/* 🔊 מחווט כעת למחולל השמע הדיגיטלי החדש */}
-              <button type="button" onClick={() => { playSynthSFX('success'); alert('הניחושים למחזור זה נשמרו בהצלחה!'); }} className="w-full bg-yellow-500 text-gray-950 font-black py-3.5 rounded-xl shadow-xl border border-yellow-600 active:scale-95 transition-all text-sm">
-                💾 שמור ניחושי מחזור {matchday}
-              </button>
-            </div>
           </div>
         )}
 
@@ -939,7 +855,7 @@ export default function App() {
               </div>
               <div className="bg-gray-950 p-4 text-center border-t border-gray-800">
                 {!isTournamentLocked() ? (
-                  <button type="button" onClick={() => { playSynthSFX('success'); alert('הניחושים ארוכי הטווח עודכנו בהצלחה!'); }} className="w-full bg-[#1e3d2f] text-white font-black py-3 rounded-xl border border-[#2a5441]">שמור שינויים</button>
+                  <button type="button" onClick={() => alert('הניחושים הארוכים עודכנו בהצלחה!')} className="w-full bg-[#1e3d2f] text-white font-black py-3 rounded-xl border border-[#2a5441]">שמור שינויים</button>
                 ) : (
                   <div className="text-xs text-gray-500 font-bold py-2">🔒 נעול – לא ניתן לבצע שינויים עד סוף העונה</div>
                 )}
@@ -1078,6 +994,7 @@ export default function App() {
 
       </div>
 
+      {/* כפתור מנהל מערכת */}
       <footer className="max-w-md mx-auto mt-12 text-center">
         <button type="button" onClick={loginAsAdmin} className={`px-4 py-2 text-xs font-bold rounded-lg border transition-all ${isAdminMode ? 'bg-red-950 border-red-800 text-red-400' : 'bg-gray-900 border-gray-800 text-gray-500 hover:text-white'}`}>
           {isAdminMode ? '🔒 צא ממצב מנהל' : '🔧 ניהול מערכת (הזנת תוצאות אמת)'}
