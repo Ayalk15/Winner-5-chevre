@@ -270,7 +270,7 @@ const allFixtures = {
     { id: 4, home: 'מקום 11', away: 'מקום 12', time: '10/04/27' },
     { id: 5, home: 'מקום 13', away: 'מקום 14', time: '10/04/27' },
     { id: 6, home: 'מקום 7', away: 'מקום 10', time: '10/04/27' },
-    { id: 8, home: 'מקום 8', away: 'מקום 9', time: '10/04/27' }
+    { id: 7, home: 'מקום 8', away: 'מקום 9', time: '10/04/27' }
   ],
   31: [
     { id: 1, home: 'מקום 3', away: 'מקום 6', time: '17/04/27' },
@@ -344,22 +344,31 @@ const isTournamentLocked = () => {
   return new Date() >= startOfSeason;
 };
 
-// 🔊 פונקציה גלובלית להפעלת אפקטים קוליים קצרים מחשבון פתוח
+// 🔊 טעינה מראש של קבצי השמע הגלובליים לפתרון בעיות חסימה בניידים
+let successAudioInstance = null;
+let whistleAudioInstance = null;
+
+if (typeof window !== 'undefined') {
+  successAudioInstance = new Audio('https://assets.mixkit.co/active_storage/sfx/911/911-84.wav');
+  successAudioInstance.preload = 'auto';
+  
+  whistleAudioInstance = new Audio('https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav');
+  whistleAudioInstance.preload = 'auto';
+}
+
 const playSFX = (type) => {
   try {
-    let url = '';
-    if (type === 'success') {
-      url = 'https://assets.mixkit.co/active_storage/sfx/911/911-84.wav'; // צליל אישור חגיגי
-    } else if (type === 'whistle') {
-      url = 'https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav'; // שריקת שופט חדה
-    }
-    if (url) {
-      const audio = new Audio(url);
-      audio.volume = 0.4; // ווליום נעים
-      audio.play();
+    if (type === 'success' && successAudioInstance) {
+      successAudioInstance.currentTime = 0;
+      successAudioInstance.volume = 0.5;
+      successAudioInstance.play();
+    } else if (type === 'whistle' && whistleAudioInstance) {
+      whistleAudioInstance.currentTime = 0;
+      whistleAudioInstance.volume = 0.4;
+      whistleAudioInstance.play();
     }
   } catch (error) {
-    console.log('Audio playback failed', error);
+    console.log('Audio playback blocked or failed', error);
   }
 };
 
@@ -377,7 +386,7 @@ export default function App() {
   const [jokers, setJokers] = useState({});
   const [countdownText, setCountdownText] = useState('');
 
-  // שעון עצר דינמי
+  // שעון עצר דינמי מחזורי
   useEffect(() => {
     const updateTimer = () => {
       const fixtures = allFixtures[matchday];
@@ -454,14 +463,14 @@ export default function App() {
     });
   };
 
-  // 🔊 שילוב שריקת שופט בנעילת משחק על ידי המנהל
+  // הפעלת שריקת שופט בנעילת משחק על ידי המנהל
   const toggleGameFinished = (gameId) => {
     setActualScores(prev => {
       const key = `${matchday}-${gameId}`;
       const current = prev[key] || { homeScore: 0, awayScore: 0, winner: 'X', isFinished: false };
       const nextState = !current.isFinished;
       if (nextState) {
-        playSFX('whistle'); // שריקת שופט בנעילה
+        playSFX('whistle');
       }
       return { ...prev, [key]: { ...current, isFinished: nextState } };
     });
@@ -804,7 +813,6 @@ export default function App() {
               })}
             </section>
             
-            {/* 🔊 כפתור שמירה קולית לחבר'ה בלשונית משחקים */}
             <div className="pt-2 text-center">
               <button type="button" onClick={() => { playSFX('success'); alert('הניחושים למחזור זה נשמרו בהצלחה!'); }} className="w-full bg-yellow-500 text-gray-950 font-black py-3.5 rounded-xl shadow-xl border border-yellow-600 active:scale-95 transition-all text-sm">
                 💾 שמור ניחושי מחזור {matchday}
