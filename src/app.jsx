@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-// מאגר כל 36 מחזורי הליגה המלאים 
+// מאגר כל 36 מחזורי הליגה המלאים
 const allFixtures = {
   1: [{ id: 1, home: 'מכבי פ"ת', away: 'הפועל ק"ש', time: '22/08/26' }, { id: 2, home: 'עירוני דורות טבריה', away: 'הפועל פ"ת', time: '22/08/26' }, { id: 3, home: 'הפועל י-ם', away: 'מכבי ת"א', time: '22/08/26' }, { id: 4, home: 'מכבי חיפה', away: 'הפועל ר"ג', time: '22/08/26' }, { id: 5, home: 'הפועל ב"ש', away: 'הפועל חיפה', time: '22/08/26' }, { id: 6, home: 'בית"ר י-ם', away: 'הפועל ת"א', time: '22/08/26' }, { id: 7, home: 'מכבי נתניה', away: 'בני סכנין', time: '22/08/26' }],
   2: [{ id: 1, home: 'בני סכנין', away: 'מכבי פ"ת', time: '29/08/26' }, { id: 2, home: 'מכבי נתניה', away: 'הפועל י-ם', time: '29/08/26' }, { id: 3, home: 'הפועל ת"א', away: 'מכבי חיפה', time: '29/08/26' }, { id: 4, home: 'הפועל ב"ש', away: 'הפועל ר"ג', time: '29/08/26' }, { id: 5, home: 'מכבי חיפה', away: 'מכבי ת"א', time: '29/08/26' }, { id: 6, home: 'הפועל פ"ת', away: 'בית"ר י-ם', time: '29/08/26' }, { id: 7, home: 'עירוני דורות טבריה', away: 'הפועל ק"ש', time: '29/08/26' }],
@@ -66,16 +66,29 @@ export default function App() {
   const [matchday, setMatchday] = useState(1);
   const [liveClockText, setLiveClockText] = useState('');
   const [countdownText, setCountdownText] = useState('');
-  const [isAdminMode, setIsAdminMode] = useState(false);
+  const [isAdminMode, setIsAdminMode] = useState(false); // הוספנו את הסטייט של המנהל
 
-  // זיכרון מקומי פנימי 
+  // זיכרון מקומי
   const [predictions, setPredictions] = useState(() => JSON.parse(localStorage.getItem('predictions')) || {});
   const [tournament, setTournament] = useState(() => JSON.parse(localStorage.getItem('tournament')) || { champion: '', topScorer: '', topAssists: '', favoriteTeam: '' });
   const [jokers, setJokers] = useState(() => JSON.parse(localStorage.getItem('jokers')) || {});
   const [actualScores, setActualScores] = useState(() => JSON.parse(localStorage.getItem('actualScores')) || {});
   const [matchdayGoals, setMatchdayGoals] = useState(() => JSON.parse(localStorage.getItem('matchdayGoals')) || {});
 
-  // שמירה אוטומטית לזיכרון
+  // הפונקציה שהייתה חסרה!
+  const loginAsAdmin = () => {
+    if (isAdminMode) {
+      setIsAdminMode(false);
+    } else {
+      const pass = prompt('הכנס סיסמת מנהל:');
+      if (pass === '2531') {
+        setIsAdminMode(true);
+      } else if (pass !== null) {
+        alert('סיסמה שגויה!');
+      }
+    }
+  };
+
   useEffect(() => { localStorage.setItem('predictions', JSON.stringify(predictions)); }, [predictions]);
   useEffect(() => { localStorage.setItem('tournament', JSON.stringify(tournament)); }, [tournament]);
   useEffect(() => { localStorage.setItem('jokers', JSON.stringify(jokers)); }, [jokers]);
@@ -166,19 +179,7 @@ export default function App() {
         matchPoints += localPoints;
       }
     });
-
-    let liveGoalsPoints = 0;
-    const currentScorer = tournament.topScorer || '';
-    if (currentScorer.trim()) {
-      Object.keys(matchdayGoals).forEach(key => {
-        const parts = key.split('-');
-        if (parts.length >= 2 && parts[1].trim() === currentScorer.trim()) {
-          liveGoalsPoints += (matchdayGoals[key] || 0) * 2;
-        }
-      });
-    }
-
-    return { totalPoints: matchPoints + liveGoalsPoints };
+    return { totalPoints: matchPoints };
   };
 
   const stats = getLiveStatistics();
@@ -318,6 +319,13 @@ export default function App() {
           </div>
         )}
       </div>
+
+      <footer className="max-w-md mx-auto mt-12 text-center">
+        {/* הנה הכפתור שהפיל לנו את הכל מקודם - עכשיו הוא מקושר לפונקציה! */}
+        <button type="button" onClick={loginAsAdmin} className={`px-4 py-2 text-xs font-bold rounded-lg border transition-all ${isAdminMode ? 'bg-red-950 border-red-800 text-red-400' : 'bg-gray-900 border-gray-800 text-gray-500 hover:text-white'}`}>
+          {isAdminMode ? '🔒 צא ממצב מנהל' : '🔧 ניהול מערכת (הזנת תוצאות אמת)'}
+        </button>
+      </footer>
     </div>
   );
 }
