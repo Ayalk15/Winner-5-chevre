@@ -112,7 +112,7 @@ const allFixtures = {
   ],
   13: [
     { id: 1, home: 'מכבי נתניה', away: 'מכבי פ"ת', time: '05/12/26' },
-    { id: 2, home: 'bני סכנין', away: 'הפועל ת"א', time: '05/12/26' },
+    { id: 2, home: 'בני סכנין', away: 'הפועל ת"א', time: '05/12/26' },
     { id: 3, home: 'בית"ר י-ם', away: 'הפועל ב"ש', time: '05/12/26' },
     { id: 4, home: 'הפועל חיפה', away: 'מכבי חיפה', time: '05/12/26' },
     { id: 5, home: 'הפועל ר"ג', away: 'הפועל י-ם', time: '05/12/26' },
@@ -124,7 +124,7 @@ const allFixtures = {
     { id: 2, home: 'הפועל פ"ת', away: 'עירוני דורות טבריה', time: '12/12/26' },
     { id: 3, home: 'מכבי ת"א', away: 'הפועל י-ם', time: '12/12/26' },
     { id: 4, home: 'הפועל ר"ג', away: 'מכבי חיפה', time: '12/12/26' },
-    { id: 5, home: 'הפועל ב"ש', away: 'הפועל חיפה', time: '12/12/26' },
+    { id: 5, home: 'הפועל חיפה', away: 'הפועל ב"ש', time: '12/12/26' },
     { id: 6, home: 'בית"ר י-ם', away: 'הפועל ת"א', time: '12/12/26' },
     { id: 7, home: 'בני סכנין', away: 'מכבי נתניה', time: '12/12/26' }
   ],
@@ -166,7 +166,7 @@ const allFixtures = {
   ],
   19: [
     { id: 1, home: 'מכבי פ"ת', away: 'הפועל חיפה', time: '16/01/27' },
-    { id: 2, home: 'בית"ר י-ם', away: 'הפועל ר"ג', time: '16/01/27' },
+    { id: 2, base: 'בית"ר י-ם', away: 'הפועל ר"ג', time: '16/01/27' },
     { id: 3, home: 'בני סכנין', away: 'מכבי ת"א', time: '16/01/27' },
     { id: 4, home: 'מכבי נתניה', away: 'הפועל פ"ת', time: '16/01/27' },
     { id: 5, home: 'הפועל ת"א', away: 'הפועל ק"ש', time: '16/01/27' },
@@ -318,7 +318,7 @@ const allFixtures = {
 
 const ISRAELI_TEAMS = ['מכבי ת"א', 'מכבי חיפה', 'בית"ר י-ם', 'הפועל ב"ש', 'הפועל ת"א', 'מכבי נתניה', 'הפועל חיפה', 'מכבי פ"ת', 'בני סכנין', 'עירוני דורות טבריה', 'הפועל ק"ש', 'הפועל פ"ת', 'הפועל ר"ג', 'הפועל י-ם'];
 
-// פונקציות עזר גלובליות קבועות מחוץ לרכיב (מונע את שגיאות ה-Build של Vercel)
+// פונקציות עזר גלובליות קבועות מחוץ לרכיב
 const getGameLockDeadline = (dateStr) => {
   if (!dateStr || dateStr === 'יעודכן בהמשך') return null;
   const parts = dateStr.split('/');
@@ -345,22 +345,21 @@ const isTournamentLocked = () => {
 };
 
 export default function App() {
+  // 1. כל הסטייטס מאורגנים בראש הקומפוננטה
   const [currentTab, setCurrentTab] = useState('predictions');
   const [matchday, setMatchday] = useState(1);
   const [predictions, setPredictions] = useState({});
   const [tournamentPredictions, setTournamentPredictions] = useState({ champion: '', topScorer: '', topAssists: '', favoriteTeam: '' });
-  
   const [actualScores, setActualScores] = useState({});
   const [isAdminMode, setIsAdminMode] = useState(false);
   const [actualTournament, setActualTournament] = useState({ champion: '', topScorer: '', topAssists: '' });
-
   const [matchdayGoals, setMatchdayGoals] = useState({});
   const [adminInputPlayer, setAdminInputPlayer] = useState('');
   const [adminInputGoals, setAdminInputGoals] = useState(0);
   const [jokers, setJokers] = useState({});
   const [countdownText, setCountdownText] = useState('');
 
-  // שעון עצר דינמי
+  // 2. שעון עצר דינמי
   useEffect(() => {
     const updateTimer = () => {
       const fixtures = allFixtures[matchday];
@@ -397,6 +396,7 @@ export default function App() {
     return () => clearInterval(interval);
   }, [matchday]);
 
+  // 3. כל פונקציות שינוי הסטייט והאירועים (ללא שום בעיית סדר)
   const handlePredict = (gameId, value) => {
     setPredictions(prev => {
       const key = `${matchday}-${gameId}`;
@@ -473,20 +473,21 @@ export default function App() {
     });
   };
 
-  // פונקציה יחידה לחישוב שערים בזמן אמת
-  const getLiveGoalsPointsOnly = () => {
-    let pts = 0;
-    const currentScorer = tournamentPredictions?.topScorer || '';
-    if (!currentScorer.trim()) return 0;
-    Object.keys(matchdayGoals).forEach(key => {
-      const parts = key.split('-');
-      if (parts.length >= 2 && parts[1].trim() === currentScorer.trim()) {
-        pts += (matchdayGoals[key] || 0) * 2;
+  const loginAsAdmin = () => {
+    if (isAdminMode) {
+      setIsAdminMode(false);
+    } else {
+      const pass = prompt('הכנס סיסמת מנהל מערכת:');
+      if (pass === '2531') {
+        setIsAdminMode(true);
+        alert('התחברת בהצלחה כמנהל!');
+      } else if (pass !== null) {
+        alert('סיסמה שגויה!');
       }
-    });
-    return pts;
+    }
   };
 
+  // 4. פונקציות חישוב נתונים (מסודרות לפני שהמשתנים קוראים להן)
   const getLiveStatistics = () => {
     let totalPredicted = Object.keys(predictions).length;
     let exactMatches = 0;
@@ -520,7 +521,16 @@ export default function App() {
       }
     });
 
-    let liveScorerGoalsPoints = getLiveGoalsPointsOnly();
+    let liveScorerGoalsPoints = 0;
+    const currentScorer = tournamentPredictions?.topScorer || '';
+    if (currentScorer.trim()) {
+      Object.keys(matchdayGoals).forEach(key => {
+        const parts = key.split('-');
+        if (parts.length >= 2 && parts[1].trim() === currentScorer.trim()) {
+          liveScorerGoalsPoints += (matchdayGoals[key] || 0) * 2;
+        }
+      });
+    }
 
     let finalScorerBonus = (actualTournament.topScorer && tournamentPredictions.topScorer && actualTournament.topScorer.trim() === tournamentPredictions.topScorer.trim()) ? 40 : 0;
     let finalChampionBonus = (actualTournament.champion && tournamentPredictions.champion && actualTournament.champion.trim() === tournamentPredictions.champion.trim()) ? 40 : 0;
@@ -539,8 +549,6 @@ export default function App() {
       totalPoints
     };
   };
-
-  const stats = getLiveStatistics();
 
   const getMatchdayScoreOnly = () => {
     let matchdayPoints = 0;
@@ -571,14 +579,29 @@ export default function App() {
     return matchdayPoints;
   };
 
+  // 5. הרצת החישובים לתוך משתנים סופיים
+  const stats = getLiveStatistics();
   const currentMatchdayScore = getMatchdayScoreOnly();
-  const goalsPoints = getLiveGoalsPointsOnly();
+
+  // חישוב נקודות כובשים מקומי
+  let goalsPoints = 0;
+  const currentScorer = tournamentPredictions?.topScorer || '';
+  if (currentScorer.trim()) {
+    Object.keys(matchdayGoals).forEach(key => {
+      const parts = key.split('-');
+      if (parts.length >= 2 && parts[1].trim() === currentScorer.trim()) {
+        goalsPoints += (matchdayGoals[key] || 0) * 2;
+      }
+    });
+  }
+
   const userTeamSuffix = tournamentPredictions.favoriteTeam ? ` (${tournamentPredictions.favoriteTeam})` : '';
   const leaderboard = stats.totalPoints > 0 ? [{ name: `אייל אשכנזי${userTeamSuffix}`, points: stats.totalPoints, trend: '–' }] : [];
 
   return (
     <div className="min-h-screen bg-gray-950 text-white p-4 pb-24" style={{ direction: 'rtl' }}>
       
+      {/* תפריט עליון מקובע */}
       <div className="sticky top-0 bg-gray-950/95 backdrop-blur-md pt-2 pb-3 z-50 max-w-md mx-auto border-b border-gray-900/50">
         <header className="text-center py-2">
           <h1 className="text-2xl font-extrabold text-yellow-500 drop-shadow-md">🏆 10 חבר'ה - יוספטל</h1>
@@ -596,6 +619,7 @@ export default function App() {
 
       <div className="max-w-md mx-auto mt-4">
         
+        {/* לשונית 1: משחקים */}
         {currentTab === 'predictions' && (
           <div className="space-y-6">
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 shadow-xl space-y-3">
@@ -966,4 +990,24 @@ export default function App() {
                   <li><span className="text-yellow-500 font-bold">📈 חצי מגמה:</span> חצי המגמה בטבלה (▲ / ▼ / –) מציגים בכל מחזור את תנועת המיקומים של השחקנים.</li>
                   <li><span className="text-yellow-500 font-bold">חשיפת ניחושים:</span> ברגע שמשחק ננעל, כולם יכולים לראות את הניחושים של כולם בלייב!</li>
                   <li><span className="text-yellow-500 font-bold">ריצה במחזורים:</span> בכל פעם ששחקן שנבחר כמלך השערים מבקיע גול במחזור, המשתמש מקבל <span className="text-yellow-500 font-bold">2 נקודות לכל גול</span> באותו רגע!</li>
-                  <li><span className="text-white font-bold">👑 ניחוש מלך השערים
+                  <li><span className="text-white font-bold">👑 ניחוש מלך השערים הסופי:</span> מעניק <span className="text-white font-bold">40 נקודות</span> בסוף העונה.</li>
+                  <li><span className="text-white font-bold">👑 ניחוש האלופה הסופית:</span> מעניק <span className="text-white font-bold">40 נקודות</span> בסוף העונה.</li>
+                  <li><span className="text-white font-bold">👑 ניחוש מלך הבישולים הסופי:</span> מעניק <span className="text-white font-bold">50 נקודות</span> בסוף העונה.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        )}
+
+      </div>
+
+      {/* כפתור מנהל מערכת */}
+      <footer className="max-w-md mx-auto mt-12 text-center">
+        <button type="button" onClick={loginAsAdmin} className={`px-4 py-2 text-xs font-bold rounded-lg border transition-all ${isAdminMode ? 'bg-red-950 border-red-800 text-red-400' : 'bg-gray-900 border-gray-800 text-gray-500 hover:text-white'}`}>
+          {isAdminMode ? '🔒 צא ממצב מנהל' : '🔧 ניהול מערכת (הזנת תוצאות אמת)'}
+        </button>
+      </footer>
+
+    </div>
+  );
+}
